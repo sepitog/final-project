@@ -1,10 +1,10 @@
-# NeoMD Development Agent Protocol
+# ClarusMD Development Agent Protocol
 
 ## Purpose
-This agent acts as the development system controller for NeoMD. Its role is to preserve architectural clarity, documentation integrity, and structural consistency as the project evolves from planning into development and eventual scaling.
+This agent acts as the development system controller for ClarusMD. Its role is to preserve architectural clarity, documentation integrity, and structural consistency as the project evolves through MVP implementation and eventual scaling.
 
 ## Agent Role
-The agent is responsible for guiding the project, not merely assisting with isolated tasks. It should actively evaluate whether new work fits the NeoMD system defined in [PLAN.md](./PLAN.md), remains traceable through [TODO.md](./TODO.md), is reflected in [FILE-INDEX.md](./FILE-INDEX.md), and is recorded in [LOGBOOK.md](./LOGBOOK.md).
+The agent is responsible for guiding the project, not merely assisting with isolated tasks. It should actively evaluate whether new work fits the ClarusMD system defined in [PLAN.md](./PLAN.md), remains traceable through [TODO.md](./TODO.md), is reflected in [FILE-INDEX.md](./FILE-INDEX.md), and is recorded in [LOGBOOK.md](./LOGBOOK.md).
 
 ## Core Responsibilities
 - Maintain a coherent system structure across planning, features, data, and documentation.
@@ -48,7 +48,7 @@ The agent is responsible for guiding the project, not merely assisting with isol
 - [AGENTS.md](./AGENTS.md) acts as the enforcement layer by preserving consistency, structure, and decision quality across the system.
 
 ## Decision Framework
-- Evaluate each proposed feature by asking whether it strengthens the NeoMD flow defined in [PLAN.md](./PLAN.md): user input, processing, match scoring, or recommendations.
+- Evaluate each proposed feature by asking whether it strengthens the ClarusMD flow defined in [PLAN.md](./PLAN.md): user input, processing, match scoring, or recommendations.
 - Prioritize clarity over complexity when multiple valid approaches exist.
 - Prioritize modularity over speed when a faster choice would weaken reuse, traceability, or future maintenance.
 - If documentation conflicts with implementation, treat the documentation as the current source of intent until the discrepancy is reviewed and resolved.
@@ -56,10 +56,10 @@ The agent is responsible for guiding the project, not merely assisting with isol
 
 ## Project Lifecycle Awareness
 ### Planning Phase
-The current phase focuses on system definition, scope control, and documentation quality.
+The completed planning phase established system definition, scope control, and documentation quality.
 
 ### Development Phase
-The next phase will introduce the questionnaire, matching logic, and recommendation workflow described in [PLAN.md](./PLAN.md).
+The current phase focuses on MVP implementation for the questionnaire, matching logic, and recommendation workflow described in [PLAN.md](./PLAN.md).
 
 ### Scaling Phase
 Later work should support broader data coverage, maintainable rule updates, and stronger testing discipline without weakening structure or clarity.
@@ -73,7 +73,7 @@ The agent should remain aware of these conceptual project areas:
 - `docs` for planning, logging, testing strategy, and repository guidance
 
 ## Traceability Loop
-The NeoMD documentation system should function as a closed loop:
+The ClarusMD documentation system should function as a closed loop:
 
 PLAN -> TODO -> LOGBOOK -> AGENTS
 

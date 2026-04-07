@@ -1,9 +1,9 @@
-# NeoMD Project Plan
+# ClarusMD Project Plan
 
-NeoMD is currently a planning-phase project with no implementation yet. This document defines the system direction that guides [AGENTS.md](./AGENTS.md), task tracking in [TODO.md](./TODO.md), repository structure in [FILE-INDEX.md](./FILE-INDEX.md), and future testing in [UNIT-TESTS.md](./UNIT-TESTS.md).
+ClarusMD is currently in the MVP Implementation Phase. This document defines the system direction that guides [AGENTS.md](./AGENTS.md), task tracking in [TODO.md](./TODO.md), repository structure in [FILE-INDEX.md](./FILE-INDEX.md), and testing for MVP logic in [UNIT-TESTS.md](./UNIT-TESTS.md).
 
 ## Project Description
-NeoMD is a conceptual web-based application designed to help pre-med students in Ontario evaluate their readiness for medical school using academic, extracurricular, and admissions-related information.
+ClarusMD is a web-based MVP application being built to help pre-med students in Ontario evaluate their readiness for medical school using academic, extracurricular, and admissions-related information.
 
 ## Project Goals
 - Collect relevant user academic and extracurricular data through a structured intake process.
@@ -13,13 +13,19 @@ NeoMD is a conceptual web-based application designed to help pre-med students in
 
 ## System Architecture Overview
 ### Input Layer
-The input layer gathers user profile data through a guided questionnaire covering academics, activities, and other readiness indicators.
+The input layer is being built to gather user profile data through a guided questionnaire covering academics, activities, and other readiness indicators.
 
 ### Processing Layer
-The processing layer evaluates submitted data against structured Ontario medical school criteria and transforms inputs into a match score and supporting logic outcomes.
+The processing layer is being implemented to evaluate submitted data against structured Ontario medical school criteria and transform inputs into a match score and supporting logic outcomes.
 
 ### Output Layer
-The output layer presents readiness results, improvement recommendations, and future progress-oriented guidance.
+The output layer is being prepared to present readiness results, improvement recommendations, and future progress-oriented guidance.
+
+## Current Implementation Scope
+- Landing page UI (`index.html`) is integrated as the current application entry point.
+- Questionnaire system is in development for collecting GPA, MCAT, and extracurricular inputs.
+- Scoring logic is in development for translating questionnaire responses into readiness signals.
+- Results dashboard is planned and partially defined for match summaries and recommendation output.
 
 ## Core Components
 - Questionnaire module for collecting applicant data in a structured format.
@@ -37,31 +43,31 @@ The intended system flow is:
 
 User Input -> Processing -> Match Score -> Recommendations
 
-This flow keeps NeoMD organized as a pipeline rather than a set of disconnected features.
+This flow keeps ClarusMD organized as a pipeline rather than a set of disconnected features.
 
 ## Assumptions and Constraints
 - The system assumes that users provide accurate and complete self-reported information.
-- NeoMD is focused on Ontario medical school readiness only in the current project scope.
+- ClarusMD is focused on Ontario medical school readiness only in the current project scope.
 - The current design does not include real-time requirement updates or external system integrations.
 
 ## Scope Boundaries
 - The current phases do not include live admissions data, automated school data syncing, or external account connections.
-- The project does not yet include production implementation, deployment planning, or operational infrastructure.
-- The current scope is limited to planning the questionnaire, matching, recommendations, and progress tracking at a conceptual level.
+- The project does not yet include production deployment, operational infrastructure, or external integrations.
+- The current scope is limited to building the MVP questionnaire, scoring, matching, recommendations, and a partial results experience.
 
 ## Future AI Integration
-- NeoMD may later use AI to explain match results in clearer language, surface personalized recommendation themes, or summarize progress patterns over time.
+- ClarusMD may later use AI to explain match results in clearer language, surface personalized recommendation themes, or summarize progress patterns over time.
 - Any future AI capability should remain supportive and interpretive, not a replacement for the system's structured comparison logic.
 
 ## Development Phases
 ### Phase 1: Setup and Structure
-Establish the project foundation, documentation system, conceptual file organization, and project controls.
+Establish the project foundation, documentation system, initial file organization, and project controls.
 
 ### Phase 2: User Input
-Design the questionnaire module and define the academic, extracurricular, and profile fields required for evaluation.
+Build the questionnaire module and define the academic, extracurricular, and profile fields required for evaluation.
 
 ### Phase 3: Matching System
-Define the matching engine, scoring logic, and comparison framework for Ontario medical school readiness.
+Implement the matching engine, scoring logic, and comparison framework for Ontario medical school readiness.
 
 ### Phase 4: Recommendations and Tracking
-Plan the recommendation system and progress tracking workflow so users can interpret results and identify next steps.
+Build the recommendation workflow and expand the results experience so users can interpret outcomes and identify next steps.

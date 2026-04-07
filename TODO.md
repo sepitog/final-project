@@ -1,54 +1,52 @@
-# NeoMD Task Tracker
+# ClarusMD Task Tracker
 
 This tracker converts the project direction in [PLAN.md](./PLAN.md) into structured work items. Status and priorities should stay aligned with the documentation rules in [AGENTS.md](./AGENTS.md).
 
 ## Project Progress Overview
-- Total Tasks: 10
-- Completed: 3
-- In Progress: 1
-- Pending: 6
+- Total Tasks: 9
+- Completed: 2
+- In Progress: 3
+- Pending: 4
 
 ## Milestones
 - Foundation (completed)
-- System Design (in progress)
-- Feature Planning (pending)
+- MVP Buildout (in progress)
+- Results and Refinement (pending)
 
 ## Progress Table
 
 | Task | Status | Priority | Notes |
 |------|--------|----------|------|
-| Initialize NeoMD as a planning-only repository | Completed | High | Foundation established for the lab assignment. |
-| Create the core Markdown scaffold | Completed | High | Core documentation files are in place. |
-| Define initial scope and documentation boundaries | Completed | High | Scope is limited to planning and structure. |
-| Research Ontario medical school requirements | Pending | High | Required before reliable matching criteria can be defined. |
-| Define questionnaire data fields | Pending | High | Needed to support the input layer described in `PLAN.md`. |
-| Outline match score logic | Pending | High | Must remain conceptual until formal data design is complete. |
-| Plan recommendation rules | Pending | Medium | Depends on matching outcomes and gap analysis logic. |
-| Define progress tracking model | Pending | Medium | Supports future longitudinal readiness evaluation. |
-| Create a scalable update process for school requirement changes | Pending | Medium | Important for long-term maintainability. |
-| Prepare documentation standards for future feature expansion | In Progress | Medium | Anchored by `AGENTS.md`, `FILE-INDEX.md`, and `LOGBOOK.md`. |
+| Integrate ClarusMD UI | Completed | High | Landing page UI is now the visible application foundation. |
+| Update documentation for MVP implementation phase | Completed | High | Core project files now reflect active development status. |
+| Build navigation from landing page to questionnaire | In Progress | High | Connects the entry UI to the main input workflow. |
+| Implement questionnaire inputs for GPA, MCAT, and ECs | In Progress | High | Core user data fields are actively being wired into the MVP flow. |
+| Develop scoring function | In Progress | High | Converts questionnaire inputs into readiness signals. |
+| Implement school matching logic | Pending | High | Applies structured comparison rules to scoring outcomes. |
+| Generate recommendation output | Pending | Medium | Uses matching results to produce improvement guidance. |
+| Build initial results dashboard | Pending | Medium | Planned to display scores, match summaries, and recommendations. |
+| Refine documentation and testing alignment | Pending | Medium | Keeps implementation work traceable across core project files. |
 
 ## Setup
-- Completed: Initialize the NeoMD repository as a planning-only project.
-- Completed: Create the initial documentation scaffold.
-- Completed: Establish project scope and structural boundaries.
+- Completed: Integrate the ClarusMD landing page UI into the repository.
+- Completed: Update the documentation scaffold for implementation-phase development.
 
-## Research
-- Pending: Research Ontario medical school admission requirements across target schools.
-- Pending: Identify the applicant readiness factors most relevant to pre-med students.
-- Pending: Document the academic, extracurricular, and profile inputs needed for assessment.
+## Application Flow
+- In Progress: Build navigation from the landing page to the questionnaire experience.
+- In Progress: Confirm the MVP user path from input collection to result display.
+- Pending: Connect recommendation output to the results dashboard.
 
-## Data Design
-- Pending: Define the structure for school requirement data and comparison criteria.
-- Pending: Design the conceptual data model for questionnaire responses.
-- Pending: Identify the information needed for GPA interpretation and readiness scoring.
+## Input System
+- In Progress: Implement questionnaire fields for GPA, MCAT, and extracurricular inputs.
+- Pending: Validate that required inputs are captured in a consistent structure.
+- Pending: Prepare questionnaire data for downstream scoring and matching.
 
-## Features
-- Pending: Design the questionnaire module for structured user input.
-- Pending: Define the matching engine workflow from requirements to score generation.
-- Pending: Plan the recommendation system for actionable improvement guidance.
-- Pending: Outline the progress tracking system for future reassessment.
+## Processing Logic
+- In Progress: Develop the scoring function for user readiness evaluation.
+- Pending: Implement school matching logic against structured criteria.
+- Pending: Confirm that processing outputs remain consistent across similar inputs.
 
-## Forward-Looking Tasks
-- Pending: Plan how NeoMD can support requirement updates without rewriting core logic.
-- Pending: Prepare a documentation and testing workflow for future feature growth and scaling.
+## Output Experience
+- Pending: Generate recommendation output based on strengths and gaps.
+- Pending: Build the initial results dashboard for score and match visibility.
+- Pending: Keep implementation notes aligned with `PLAN.md`, `LOGBOOK.md`, and `UNIT-TESTS.md`.
