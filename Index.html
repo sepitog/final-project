@@ -79,6 +79,31 @@ tailwind.config = {
 
   h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; color: #003366; line-height: 1.1; letter-spacing: -0.02em; }
   h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; color: #003366; letter-spacing: -0.015em; }
+
+  /* Dashboard */
+  .db-tab { transition: background 200ms, color 200ms, border-color 200ms; cursor: pointer; }
+  .db-tab.active { background: #003366; color: #fff; border-color: #003366; }
+  .db-tab:not(.active):hover { background: rgba(0,51,102,0.06); }
+  .db-panel { display: none; }
+  .db-panel.active { display: block; }
+  .gap-bar-track { background: rgba(0,0,0,0.08); border-radius: 9999px; height: 8px; overflow: hidden; }
+  .gap-bar-fill  { height: 8px; border-radius: 9999px; transition: width 1s ease; }
+  .action-card { border-left: 4px solid; border-radius: 0.75rem; padding: 1.25rem 1.5rem; background: #fff; margin-bottom: 1rem; border-top: 1px solid rgba(0,0,0,0.06); border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .action-card.priority-red    { border-left-color: #EF4444; }
+  .action-card.priority-yellow { border-left-color: #FBBF24; }
+  .action-card.priority-green  { border-left-color: #10B981; }
+  .checkbox-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(0,0,0,0.06); cursor: pointer; }
+  .checkbox-item:last-child { border-bottom: none; }
+  .checkbox-item input[type=checkbox] { margin-top: 3px; accent-color: #10B981; width:16px; height:16px; flex-shrink:0; cursor:pointer; }
+  .checkbox-item.checked span { text-decoration: line-through; color: #9CA3AF; }
+  .school-row { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem 1rem; border-radius: 0.75rem; border: 1px solid rgba(0,0,0,0.08); background: #fff; margin-bottom: 0.5rem; }
+  .match-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+  .match-green  { background: rgba(16,185,129,0.1); color: #059669; border: 1px solid #10B981; }
+  .match-yellow { background: rgba(251,191,36,0.1);  color: #B45309; border: 1px solid #FBBF24; }
+  .match-red    { background: rgba(239,68,68,0.1);   color: #B91C1C; border: 1px solid #EF4444; }
+  .lab-input { width: 100%; border: 1px solid rgba(0,0,0,0.12); border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 1rem; font-family: inherit; color: #003366; font-weight: 500; outline: none; transition: border-color 200ms; background: #fff; }
+  .lab-input:focus { border-color: #10B981; }
+  .insight-card { background: linear-gradient(to bottom right, #FAFAF9, rgba(16,185,129,0.05)); border: 2px solid #10B981; border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
 </style>
 </head>
 <body>
@@ -788,7 +813,7 @@ tailwind.config = {
         <button onclick="restartApp()" class="btn-ghost text-[#003366] font-semibold px-7 py-4 rounded-full border border-black/15 bg-transparent cursor-pointer">
           Start Over
         </button>
-        <button class="btn-primary bg-emerald-500 text-white font-semibold px-8 py-4 rounded-full border-0 cursor-pointer flex items-center gap-2">
+        <button onclick="openDashboard()" class="btn-primary bg-emerald-500 text-white font-semibold px-8 py-4 rounded-full border-0 cursor-pointer flex items-center gap-2">
           Create My Dashboard
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -798,20 +823,258 @@ tailwind.config = {
   </div>
 </div><!-- /results-section -->
 
+<!-- ═══════════════════════════════════════════════ -->
+<!-- DASHBOARD SECTION                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="dashboard-section" style="display:none; min-height:100vh; background:#FAFAF9;">
+
+  <!-- Top bar -->
+  <div style="background:#fff; border-bottom:1px solid rgba(0,0,0,0.08); padding:0 1.5rem; position:sticky; top:0; z-index:50;">
+    <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:60px;">
+      <span style="font-size:1.25rem; font-weight:700; color:#003366; letter-spacing:-0.01em;">ClarusMD</span>
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <span id="db-tier-badge" style="font-size:0.75rem; font-weight:600; padding:0.25rem 0.75rem; border-radius:9999px;"></span>
+        <button onclick="backToResults()" style="font-size:0.875rem; font-weight:500; color:#6B7280; background:none; border:none; cursor:pointer; padding:0.5rem 0.75rem; border-radius:0.5rem; transition:background 200ms;" onmouseover="this.style.background='rgba(0,51,102,0.06)'" onmouseout="this.style.background='none'">← Back to Results</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div style="background:#fff; border-bottom:1px solid rgba(0,0,0,0.08); padding:0 1.5rem;">
+    <div style="max-width:1100px; margin:0 auto; display:flex; gap:0.25rem; overflow-x:auto; padding:0.75rem 0;">
+      <button class="db-tab active" onclick="switchTab('chart')" id="tab-chart"
+        style="white-space:nowrap; font-size:0.875rem; font-weight:600; px:1rem; padding:0.5rem 1.25rem; border-radius:9999px; border:1px solid rgba(0,0,0,0.12); color:#003366; background:#fff;">
+        🩺 The Chart
+      </button>
+      <button class="db-tab" onclick="switchTab('treatment')" id="tab-treatment"
+        style="white-space:nowrap; font-size:0.875rem; font-weight:600; padding:0.5rem 1.25rem; border-radius:9999px; border:1px solid rgba(0,0,0,0.12); color:#003366; background:#fff;">
+        💊 Treatment Plan
+      </button>
+      <button class="db-tab" onclick="switchTab('differential')" id="tab-differential"
+        style="white-space:nowrap; font-size:0.875rem; font-weight:600; padding:0.5rem 1.25rem; border-radius:9999px; border:1px solid rgba(0,0,0,0.12); color:#003366; background:#fff;">
+        🔬 Differential
+      </button>
+      <button class="db-tab" onclick="switchTab('lab')" id="tab-lab"
+        style="white-space:nowrap; font-size:0.875rem; font-weight:600; padding:0.5rem 1.25rem; border-radius:9999px; border:1px solid rgba(0,0,0,0.12); color:#003366; background:#fff;">
+        🧪 Lab Results
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel container -->
+  <div style="max-width:1100px; margin:0 auto; padding:2rem 1.5rem;">
+
+    <!-- ── TAB A: THE CHART ── -->
+    <div id="panel-chart" class="db-panel active">
+      <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Your Profile at a Glance</p>
+      <h2 style="font-size:1.5rem; font-weight:700; color:#003366; margin:0 0 1.5rem;">The Chart</h2>
+
+      <!-- Stat cards -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:2rem;">
+        <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+          <p style="font-size:0.7rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">GPA</p>
+          <p id="db-gpa-val" style="font-size:2rem; font-weight:700; color:#003366; margin:0;"></p>
+          <p style="font-size:0.75rem; color:#9CA3AF; margin:0.25rem 0 0;">/ 4.0 scale</p>
+          <p id="db-gpa-tag" style="font-size:0.7rem; font-weight:600; margin:0.5rem 0 0; padding:0.2rem 0.6rem; border-radius:9999px; display:inline-block;"></p>
+        </div>
+        <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+          <p style="font-size:0.7rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">MCAT</p>
+          <p id="db-mcat-val" style="font-size:2rem; font-weight:700; color:#003366; margin:0;"></p>
+          <p style="font-size:0.75rem; color:#9CA3AF; margin:0.25rem 0 0;">/ 528 max</p>
+          <p id="db-mcat-tag" style="font-size:0.7rem; font-weight:600; margin:0.5rem 0 0; padding:0.2rem 0.6rem; border-radius:9999px; display:inline-block;"></p>
+        </div>
+        <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+          <p style="font-size:0.7rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Clinical Hours</p>
+          <p id="db-hrs-val" style="font-size:2rem; font-weight:700; color:#003366; margin:0;"></p>
+          <p style="font-size:0.75rem; color:#9CA3AF; margin:0.25rem 0 0;">logged so far</p>
+          <p id="db-hrs-tag" style="font-size:0.7rem; font-weight:600; margin:0.5rem 0 0; padding:0.2rem 0.6rem; border-radius:9999px; display:inline-block;"></p>
+        </div>
+        <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+          <p style="font-size:0.7rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Readiness Score</p>
+          <p id="db-score-val" style="font-size:2rem; font-weight:700; color:#003366; margin:0;"></p>
+          <p style="font-size:0.75rem; color:#9CA3AF; margin:0.25rem 0 0;">/ 100</p>
+          <p id="db-tier-val" style="font-size:0.7rem; font-weight:600; margin:0.5rem 0 0; padding:0.2rem 0.6rem; border-radius:9999px; display:inline-block;"></p>
+        </div>
+      </div>
+
+      <!-- Gap bars -->
+      <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.5rem; margin-bottom:2rem;">
+        <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1.25rem;">Progress Toward Target</p>
+        <div style="margin-bottom:1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <span style="font-size:0.875rem; font-weight:600; color:#003366;">GPA</span>
+            <span id="db-gpa-bar-label" style="font-size:0.8rem; color:#6B7280;"></span>
+          </div>
+          <div class="gap-bar-track"><div id="db-gpa-bar" class="gap-bar-fill" style="width:0%; background:#10B981;"></div></div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <span style="font-size:0.875rem; font-weight:600; color:#003366;">MCAT</span>
+            <span id="db-mcat-bar-label" style="font-size:0.8rem; color:#6B7280;"></span>
+          </div>
+          <div class="gap-bar-track"><div id="db-mcat-bar" class="gap-bar-fill" style="width:0%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <span style="font-size:0.875rem; font-weight:600; color:#003366;">Clinical Hours</span>
+            <span id="db-hrs-bar-label" style="font-size:0.8rem; color:#6B7280;"></span>
+          </div>
+          <div class="gap-bar-track"><div id="db-hrs-bar" class="gap-bar-fill" style="width:0%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Matched schools chips -->
+      <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.5rem;">
+        <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1rem;">Your School Matches</p>
+        <div id="db-school-chips" style="display:flex; flex-wrap:wrap; gap:0.5rem;"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB B: TREATMENT PLAN ── -->
+    <div id="panel-treatment" class="db-panel">
+      <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Your Personalised Action Plan</p>
+      <h2 style="font-size:1.5rem; font-weight:700; color:#003366; margin:0 0 1.5rem;">Treatment Plan</h2>
+
+      <!-- Focus card -->
+      <div id="tp-focus-card" class="insight-card" style="margin-bottom:1.5rem;">
+        <p style="font-size:0.7rem; font-weight:700; color:#059669; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">⚡ Your #1 Priority Right Now</p>
+        <p id="tp-focus-title" style="font-size:1.1rem; font-weight:700; color:#003366; margin:0 0 0.4rem;"></p>
+        <p id="tp-focus-sub" style="font-size:0.9rem; color:#6B7280; margin:0;"></p>
+      </div>
+
+      <!-- Gap bars mini -->
+      <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem; margin-bottom:1.5rem;">
+        <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1rem;">Your Gaps at a Glance</p>
+        <div style="margin-bottom:0.85rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+            <span style="font-size:0.8rem; font-weight:600; color:#003366;">GPA</span>
+            <span id="tp-gpa-label" style="font-size:0.8rem; color:#6B7280;"></span>
+          </div>
+          <div class="gap-bar-track"><div id="tp-gpa-bar" class="gap-bar-fill" style="width:0%;"></div></div>
+        </div>
+        <div style="margin-bottom:0.85rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+            <span style="font-size:0.8rem; font-weight:600; color:#003366;">MCAT</span>
+            <span id="tp-mcat-label" style="font-size:0.8rem; color:#6B7280;"></span>
+          </div>
+          <div class="gap-bar-track"><div id="tp-mcat-bar" class="gap-bar-fill" style="width:0%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+            <span style="font-size:0.8rem; font-weight:600; color:#003366;">Clinical Hours</span>
+            <span id="tp-hrs-label" style="font-size:0.8rem; color:#6B7280;"></span>
+          </div>
+          <div class="gap-bar-track"><div id="tp-hrs-bar" class="gap-bar-fill" style="width:0%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Action cards -->
+      <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">Your Action Items</p>
+      <div id="tp-action-cards"></div>
+
+      <!-- Combo insight -->
+      <div id="tp-combo-card" class="insight-card" style="margin-top:1.5rem; display:none;">
+        <p style="font-size:0.7rem; font-weight:700; color:#059669; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">💡 Insight For You</p>
+        <p id="tp-combo-text" style="font-size:0.9rem; color:#374151; margin:0;"></p>
+      </div>
+
+      <!-- Progress tracker -->
+      <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem; margin-top:1.5rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+          <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin:0;">Treatment Progress</p>
+          <span id="tp-progress-label" style="font-size:0.8rem; font-weight:600; color:#059669;">0 of 3 goals in progress</span>
+        </div>
+        <div class="gap-bar-track"><div id="tp-progress-bar" class="gap-bar-fill" style="width:0%; background:#10B981;"></div></div>
+        <div id="tp-checklist" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB C: DIFFERENTIAL ── -->
+    <div id="panel-differential" class="db-panel">
+      <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">How You Compare to Each School</p>
+      <h2 style="font-size:1.5rem; font-weight:700; color:#003366; margin:0 0 0.5rem;">Differential</h2>
+      <p style="color:#6B7280; font-size:0.9rem; margin-bottom:1.5rem;">Your stats vs. typical thresholds for each Ontario medical school.</p>
+      <div id="diff-cards"></div>
+      <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem; margin-top:1.5rem;">
+        <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">Ontario-Specific Tips</p>
+        <ul style="margin:0; padding-left:1.25rem; color:#6B7280; font-size:0.875rem; line-height:1.8;">
+          <li><strong style="color:#003366;">McMaster</strong> only considers your MCAT CARS score (min. 123). Your overall MCAT matters less here.</li>
+          <li><strong style="color:#003366;">NOSM</strong> does not require the MCAT at all. Prioritises Northern Ontario applicants.</li>
+          <li><strong style="color:#003366;">UofT</strong> has a hard GPA cutoff of 3.6 on the OMSAS scale — below this, your file is not reviewed.</li>
+          <li><strong style="color:#003366;">CASPer</strong> is required by McMaster, Queen's, and Ottawa. Prepare regardless of your stats.</li>
+          <li>Ontario schools accept under 10% of applicants — every component of your application must work together.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ── TAB D: LAB RESULTS ── -->
+    <div id="panel-lab" class="db-panel">
+      <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">What-If Simulator</p>
+      <h2 style="font-size:1.5rem; font-weight:700; color:#003366; margin:0 0 0.5rem;">Lab Results</h2>
+      <p style="color:#6B7280; font-size:0.9rem; margin-bottom:1.5rem;">Adjust your numbers and see how your score and school matches change in real time.</p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; margin-bottom:2rem;">
+        <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem;">
+          <label style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:0.5rem;">GPA</label>
+          <input id="lab-gpa" class="lab-input" type="number" min="0" max="4.0" step="0.1" oninput="recalcLab()" />
+          <p style="font-size:0.75rem; color:#9CA3AF; margin:0.4rem 0 0;">Target: 3.85+</p>
+        </div>
+        <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem;">
+          <label style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:0.5rem;">MCAT Score</label>
+          <input id="lab-mcat" class="lab-input" type="number" min="472" max="528" step="1" oninput="recalcLab()" />
+          <p style="font-size:0.75rem; color:#9CA3AF; margin:0.4rem 0 0;">Target: 515+</p>
+        </div>
+        <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:0.75rem; padding:1.25rem;">
+          <label style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:0.5rem;">Clinical Hours</label>
+          <select id="lab-hours" class="lab-input" onchange="recalcLab()" style="cursor:pointer;">
+            <option value="low">Less than 50 hours</option>
+            <option value="medium">50–150 hours</option>
+            <option value="high">150+ hours</option>
+          </select>
+          <p style="font-size:0.75rem; color:#9CA3AF; margin:0.4rem 0 0;">Target: 150+ hours</p>
+        </div>
+      </div>
+
+      <!-- Live result card -->
+      <div style="background:#fff; border:2px solid #10B981; border-radius:0.75rem; padding:1.5rem; margin-bottom:1.5rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.25rem;">Projected Score</p>
+            <div style="display:flex; align-items:baseline; gap:0.5rem;">
+              <span id="lab-score" style="font-size:2.5rem; font-weight:700; color:#003366;"></span>
+              <span style="color:#9CA3AF; font-size:0.9rem;">/100</span>
+              <span id="lab-delta" style="font-size:0.9rem; font-weight:600; margin-left:0.5rem;"></span>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.25rem;">Projected Tier</p>
+            <span id="lab-tier" style="font-size:0.875rem; font-weight:600; padding:0.3rem 0.9rem; border-radius:9999px;"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live school matches -->
+      <p style="font-size:0.75rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">Projected School Matches</p>
+      <div id="lab-schools"></div>
+    </div>
+
+  </div><!-- /panel container -->
+</div><!-- /dashboard-section -->
+
 <script>
   // Navbar scroll effect
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function() {
     navbar.classList.toggle('scrolled', window.scrollY > 20);
   });
 
   // Mobile menu toggle
-  const toggle = document.getElementById('mobile-toggle');
-  const menu = document.getElementById('mobile-menu');
-  const menuIcon = document.getElementById('menu-icon');
-  const closeIcon = document.getElementById('close-icon');
-  toggle.addEventListener('click', () => {
-    const open = menu.classList.toggle('hidden') === false;
+  var toggle = document.getElementById('mobile-toggle');
+  var menu = document.getElementById('mobile-menu');
+  var menuIcon = document.getElementById('menu-icon');
+  var closeIcon = document.getElementById('close-icon');
+  toggle.addEventListener('click', function() {
+    var open = menu.classList.toggle('hidden') === false;
     menuIcon.classList.toggle('hidden', open);
     closeIcon.classList.toggle('hidden', !open);
     menu.style.display = open ? 'flex' : 'none';
@@ -841,134 +1104,60 @@ tailwind.config = {
   }
 
   function finishApp() {
-    const gpa   = parseFloat(document.getElementById('input-gpa').value) || 0;
-    const mcat  = parseFloat(document.getElementById('input-mcat').value) || 0;
-    const hoursVal = document.getElementById('input-hours').value;
+    const gpa      = parseFloat(document.getElementById('input-gpa').value) || 0;
+    const mcat     = parseFloat(document.getElementById('input-mcat').value) || 0;
+    var hoursVal = document.getElementById('input-hours').value;
+    const { score, hNum } = calcScore(gpa, mcat, hoursVal);
+    var tier = tierFromScore(score);
 
-    // Score calculation
-    const hoursNum = { low: 50, medium: 100, high: 150 };
-
-    let gpaScore;
-    if (gpa >= 3.9)      gpaScore = 50;
-    else if (gpa >= 3.85) gpaScore = 47;
-    else if (gpa >= 3.7)  gpaScore = 42;
-    else if (gpa >= 3.5)  gpaScore = 35;
-    else if (gpa >= 3.3)  gpaScore = 28;
-    else if (gpa >= 3.0)  gpaScore = 20;
-    else                  gpaScore = 10;
-
-    let mcatScore;
-    if (mcat >= 520)      mcatScore = 30;
-    else if (mcat >= 515) mcatScore = 27;
-    else if (mcat >= 510) mcatScore = 23;
-    else if (mcat >= 505) mcatScore = 18;
-    else if (mcat >= 500) mcatScore = 12;
-    else                  mcatScore = 5;
-
-    let hrsScore;
-    const actualHoursVal = hoursNum[hoursVal] || 50;
-    if (actualHoursVal >= 150)      hrsScore = 20;
-    else if (actualHoursVal >= 100) hrsScore = 15;
-    else if (actualHoursVal >= 50)  hrsScore = 10;
-    else                            hrsScore = 5;
-
-    let rawScore = gpaScore + mcatScore + hrsScore;
-    if (gpa < 3.3)  rawScore = rawScore * 0.85;
-    if (mcat < 500) rawScore = rawScore * 0.9;
-    const score = Math.round(rawScore);
-
-    // Tier
-    let tier;
-    if (score >= 85)      tier = 'Highly Competitive';
-    else if (score >= 75) tier = 'Competitive';
-    else if (score >= 65) tier = 'Borderline Competitive';
-    else                  tier = 'Not Competitive';
-
-    // Schools
+    // Schools (results page inline text)
     let schools;
-    if (score >= 85)      schools = '<strong>Top Matches:</strong> UofT, McMaster, Queen\'s &nbsp;·&nbsp; <strong>Also Apply:</strong> Western';
-    else if (score >= 75) schools = '<strong>Strong Matches:</strong> Western, Queen\'s &nbsp;·&nbsp; <strong>Also Consider:</strong> Ottawa';
-    else if (score >= 65) schools = '<strong>Realistic:</strong> Ottawa, TMU &nbsp;·&nbsp; <strong>Stretch:</strong> Western';
-    else                  schools = '<strong>Options:</strong> TMU, NOSM &nbsp;·&nbsp; Focus on improving your profile before applying broadly.';
+    if (score>=85)      schools = '<strong>Top Matches:</strong> UofT, McMaster, Queen\'s &nbsp;&middot;&nbsp; <strong>Also Apply:</strong> Western';
+    else if (score>=75) schools = '<strong>Strong Matches:</strong> Western, Queen\'s &nbsp;&middot;&nbsp; <strong>Also Consider:</strong> Ottawa';
+    else if (score>=65) schools = '<strong>Realistic:</strong> Ottawa, TMU &nbsp;&middot;&nbsp; <strong>Stretch:</strong> Western';
+    else                schools = '<strong>Options:</strong> TMU, NOSM &nbsp;&middot;&nbsp; Focus on improving your profile before applying broadly.';
 
-    // Recommendations
-    const GPA_TARGET   = 3.85;
-    const MCAT_TARGET  = 515;
-    const HOURS_TARGET = 150;
-    const actualHours  = actualHoursVal;
+    // Recommendation gap text
+    const GPA_TARGET=3.85, MCAT_TARGET=515, HOURS_TARGET=150;
+    const gpaGap=Math.max(0,GPA_TARGET-gpa), mcatGap=Math.max(0,MCAT_TARGET-mcat), hoursGap=Math.max(0,HOURS_TARGET-hNum);
+    var gaps = [
+      {norm:gpaGap/0.5,   msg:'Your GPA is below top-tier competitiveness. Aim to increase it by approximately ' + gpaGap.toFixed(2) + ' points (target ~3.85+).'},
+      {norm:mcatGap/15,   msg:'Your MCAT score is below top-tier thresholds. Aim to increase it by approximately ' + Math.round(mcatGap) + ' points (target 515+).'},
+      {norm:hoursGap/100, msg:'Your clinical experience is below competitive levels. Aim to gain approximately ' + Math.round(hoursGap) + ' more hours (target 150+).'},
+    ].filter(function(g){return g.norm>0;}).sort(function(a,b){return b.norm-a.norm;});
+    var rec = gaps.length===0 ? 'Your profile is strong across all key areas. Focus on maintaining consistency and preparing your applications.' : gaps[0].msg;
+    if (gaps.length>1) rec += ' Additionally: ' + gaps[1].msg;
 
-    const gpaGap   = Math.max(0, GPA_TARGET - gpa);
-    const mcatGap  = Math.max(0, MCAT_TARGET - mcat);
-    const hoursGap = Math.max(0, HOURS_TARGET - actualHours);
-
-    const gpaNorm   = gpaGap  / 0.5;
-    const mcatNorm  = mcatGap / 15;
-    const hoursNorm = hoursGap / 100;
-
-    const gaps = [
-      { area: 'gpa',   norm: gpaNorm,   msg: `Your GPA is below top-tier competitiveness. Aim to increase it by approximately ${gpaGap.toFixed(2)} points (target ~3.85+).` },
-      { area: 'mcat',  norm: mcatNorm,  msg: `Your MCAT score is below top-tier thresholds. Aim to increase it by approximately ${Math.round(mcatGap)} points (target 515+).` },
-      { area: 'hours', norm: hoursNorm, msg: `Your clinical experience is below competitive levels. Aim to gain approximately ${Math.round(hoursGap)} more hours (target 150+).` },
-    ].filter(g => g.norm > 0).sort((a, b) => b.norm - a.norm);
-
-    let rec = gaps.length === 0
-      ? 'Your profile is strong across all key areas. Focus on maintaining consistency and preparing your applications.'
-      : gaps[0].msg;
-    if (gaps.length > 1) rec += ' Additionally: ' + gaps[1].msg;
-
-    // Circle color
-    const circleColor = score < 60 ? '#EF4444' : score < 80 ? '#FBBF24' : '#10B981';
-
-    // Tier badge color
-    const tierBadge = document.getElementById('tier-text');
+    var circleColor = score<60?'#EF4444':score<80?'#FBBF24':'#10B981';
+    var tierBadge = document.getElementById('tier-text');
     tierBadge.textContent = tier;
-    if (score >= 80) {
-      tierBadge.style.cssText = 'background:rgba(16,185,129,0.1);color:#059669;border:1px solid #10B981;border-radius:9999px;padding:0.5rem 1.25rem;font-size:0.875rem;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;';
-    } else if (score >= 60) {
-      tierBadge.style.cssText = 'background:rgba(251,191,36,0.1);color:#B45309;border:1px solid #FBBF24;border-radius:9999px;padding:0.5rem 1.25rem;font-size:0.875rem;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;';
-    } else {
-      tierBadge.style.cssText = 'background:rgba(239,68,68,0.1);color:#B91C1C;border:1px solid #EF4444;border-radius:9999px;padding:0.5rem 1.25rem;font-size:0.875rem;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;';
-    }
+    if (score>=80) tierBadge.style.cssText='background:rgba(16,185,129,0.1);color:#059669;border:1px solid #10B981;border-radius:9999px;padding:0.5rem 1.25rem;font-size:0.875rem;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;';
+    else if (score>=60) tierBadge.style.cssText='background:rgba(251,191,36,0.1);color:#B45309;border:1px solid #FBBF24;border-radius:9999px;padding:0.5rem 1.25rem;font-size:0.875rem;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;';
+    else tierBadge.style.cssText='background:rgba(239,68,68,0.1);color:#B91C1C;border:1px solid #EF4444;border-radius:9999px;padding:0.5rem 1.25rem;font-size:0.875rem;font-weight:600;display:inline-flex;align-items:center;gap:0.5rem;';
 
-    // Populate outputs
     document.getElementById('school-output').innerHTML = schools;
     document.getElementById('recommendation-output').textContent = rec;
-
-    // Show results
     document.getElementById('questionnaire-section').style.display = 'none';
     document.getElementById('results-section').style.display = 'block';
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
 
-    // Animate circle
-    const circle = document.getElementById('progress-circle');
+    var circle = document.getElementById('progress-circle');
     circle.style.stroke = circleColor;
-    const circumference = 440;
-    const offset = circumference - (score / 100) * circumference;
-    // Force reflow so transition fires
-    circle.style.strokeDashoffset = circumference;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        circle.style.strokeDashoffset = offset;
-      });
-    });
+    var offset = 440 - (score/100)*440;
+    circle.style.strokeDashoffset = 440;
+    requestAnimationFrame(function(){ requestAnimationFrame(function() { circle.style.strokeDashoffset = offset; }); });
 
-    // Animate number
-    const numEl = document.getElementById('score-number');
-    numEl.textContent = '0';
-    numEl.style.color = circleColor;
-    const duration = 1200;
-    const start = performance.now();
-    function tick(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      numEl.textContent = Math.round(progress * score);
-      if (progress < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
+    var numEl = document.getElementById('score-number');
+    numEl.textContent = '0'; numEl.style.color = circleColor;
+    var start = performance.now();
+    (function tick(now) {
+      var p = Math.min((now-start)/1200,1);
+      numEl.textContent = Math.round(p*score);
+      if (p<1) requestAnimationFrame(tick);
+    })(performance.now());
   }
 
   function restartApp() {
-    // Reset questionnaire state
     document.getElementById('step-1').style.display = 'block';
     document.getElementById('step-2').style.display = 'none';
     document.getElementById('step-3').style.display = 'none';
@@ -981,24 +1170,481 @@ tailwind.config = {
     document.getElementById('progress-circle').style.strokeDashoffset = '440';
     document.getElementById('score-number').textContent = '0';
     document.getElementById('results-section').style.display = 'none';
+    document.getElementById('dashboard-section').style.display = 'none';
     document.getElementById('questionnaire-section').style.display = 'block';
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
+  }
+
+  // -- SHARED STATE --
+  var DB = { gpa:0, mcat:0, hoursVal:'low', hoursNum:50, score:0, tier:'', checkboxStates:{} };
+
+  // -- SCORE ENGINE (shared by finishApp, openDashboard, recalcLab) --
+  function calcScore(gpa, mcat, hoursVal) {
+    var hMap = { low:50, medium:100, high:150 };
+    var hNum = hMap[hoursVal] || 50;
+    let gS;
+    if (gpa>=3.9) gS=50; else if (gpa>=3.85) gS=47; else if (gpa>=3.7) gS=42;
+    else if (gpa>=3.5) gS=35; else if (gpa>=3.3) gS=28; else if (gpa>=3.0) gS=20; else gS=10;
+    let mS;
+    if (mcat>=520) mS=30; else if (mcat>=515) mS=27; else if (mcat>=510) mS=23;
+    else if (mcat>=505) mS=18; else if (mcat>=500) mS=12; else mS=5;
+    let hS;
+    if (hNum>=150) hS=20; else if (hNum>=100) hS=15; else if (hNum>=50) hS=10; else hS=5;
+    var raw = gS + mS + hS;
+    if (gpa<3.3)  raw*=0.85;
+    if (mcat<500) raw*=0.9;
+    return { score: Math.round(raw), hNum };
+  }
+
+  function tierFromScore(s) {
+    if (s>=85) return 'Highly Competitive';
+    if (s>=75) return 'Competitive';
+    if (s>=65) return 'Borderline Competitive';
+    return 'Not Competitive';
+  }
+
+  function schoolsFromScore(s) {
+    if (s>=93) return [
+      {name:'UofT',status:'Top Match',cls:'match-green'},{name:'McMaster',status:'Top Match',cls:'match-green'},
+      {name:"Queen's",status:'Top Match',cls:'match-green'},{name:'Western',status:'Top Match',cls:'match-green'},
+      {name:'Ottawa',status:'Top Match',cls:'match-green'},{name:'TMU',status:'Top Match',cls:'match-green'},{name:'NOSM',status:'Top Match',cls:'match-green'}
+    ];
+    if (s>=85) return [
+      {name:'UofT',status:'Top Match',cls:'match-green'},{name:'McMaster',status:'Top Match',cls:'match-green'},
+      {name:"Queen's",status:'Top Match',cls:'match-green'},{name:'Western',status:'Strong Match',cls:'match-green'},
+      {name:'Ottawa',status:'Strong Match',cls:'match-green'},{name:'TMU',status:'Also Apply',cls:'match-yellow'},{name:'NOSM',status:'Also Apply',cls:'match-yellow'}
+    ];
+    if (s>=75) return [
+      {name:'UofT',status:'Reach',cls:'match-yellow'},{name:'McMaster',status:'Strong Match',cls:'match-green'},
+      {name:"Queen's",status:'Strong Match',cls:'match-green'},{name:'Western',status:'Strong Match',cls:'match-green'},
+      {name:'Ottawa',status:'Also Consider',cls:'match-yellow'},{name:'TMU',status:'Reach',cls:'match-yellow'},{name:'NOSM',status:'Consider',cls:'match-yellow'}
+    ];
+    if (s>=65) return [
+      {name:'UofT',status:'Out of Range',cls:'match-red'},{name:'McMaster',status:'Out of Range',cls:'match-red'},
+      {name:"Queen's",status:'Stretch',cls:'match-red'},{name:'Western',status:'Stretch',cls:'match-red'},
+      {name:'Ottawa',status:'Realistic',cls:'match-green'},{name:'TMU',status:'Realistic',cls:'match-green'},{name:'NOSM',status:'Consider',cls:'match-yellow'}
+    ];
+    return [
+      {name:'UofT',status:'Out of Range',cls:'match-red'},{name:'McMaster',status:'Out of Range',cls:'match-red'},
+      {name:"Queen's",status:'Out of Range',cls:'match-red'},{name:'Western',status:'Out of Range',cls:'match-red'},
+      {name:'Ottawa',status:'Out of Range',cls:'match-red'},{name:'TMU',status:'Focus on Profile',cls:'match-yellow'},{name:'NOSM',status:'Possible',cls:'match-yellow'}
+    ];
+  }
+
+  function badgeStyle(score) {
+    if (score>=80) return 'background:rgba(16,185,129,0.1);color:#059669;border:1px solid #10B981;';
+    if (score>=65) return 'background:rgba(251,191,36,0.1);color:#B45309;border:1px solid #FBBF24;';
+    return 'background:rgba(239,68,68,0.1);color:#B91C1C;border:1px solid #EF4444;';
+  }
+
+  function barColor(pct) {
+    if (pct>=97) return '#10B981';
+    if (pct>=85) return '#10B981';
+    if (pct>=70) return '#FBBF24';
+    return '#EF4444';
+  }
+
+  function mcatBarPct(mcat) {
+    // Uses a stricter scale: 515 = 100%, 500 = ~58%, 472 = 0%
+    // This makes 500 (average) look clearly below competitive, not near-target
+    if (!mcat) return 0;
+    var min = 472, target = 515;
+    var pct = Math.round(((mcat - min) / (target - min)) * 100);
+    return Math.max(0, Math.min(100, pct));
+  }
+
+  function tagStyle(pct) {
+    if (pct>=97) return 'background:rgba(16,185,129,0.1);color:#059669;';
+    if (pct>=85) return 'background:rgba(16,185,129,0.1);color:#059669;';
+    if (pct>=70) return 'background:rgba(251,191,36,0.1);color:#B45309;';
+    return 'background:rgba(239,68,68,0.1);color:#B91C1C;';
+  }
+
+  function tagLabel(pct) {
+    if (pct>=97) return 'Excellent';
+    if (pct>=85) return 'Competitive';
+    if (pct>=70) return 'Average';
+    return 'Below Avg';
+  }
+
+  // -- OPEN DASHBOARD --
+  function openDashboard() {
+    DB.gpa      = parseFloat(document.getElementById('input-gpa').value) || 0;
+    DB.mcat     = parseFloat(document.getElementById('input-mcat').value) || 0;
+    DB.hoursVal = document.getElementById('input-hours').value || 'low';
+    const res   = calcScore(DB.gpa, DB.mcat, DB.hoursVal);
+    DB.score    = res.score;
+    DB.hoursNum = res.hNum;
+    DB.tier     = tierFromScore(DB.score);
+
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('dashboard-section').style.display = 'block';
+    window.scrollTo(0,0);
+
+    // top bar tier badge
+    var tb = document.getElementById('db-tier-badge');
+    tb.textContent = DB.tier;
+    tb.style.cssText = badgeStyle(DB.score) + 'border-radius:9999px;padding:0.25rem 0.75rem;font-size:0.75rem;font-weight:600;';
+
+    buildChart();
+    buildTreatment();
+    buildDifferential();
+    buildLab();
+    switchTab('chart');
+  }
+
+  function backToResults() {
+    document.getElementById('dashboard-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'block';
+    window.scrollTo(0,0);
+  }
+
+  // -- TAB SWITCHER --
+  function switchTab(name) {
+    ['chart','treatment','differential','lab'].forEach(function(t) {
+      document.getElementById('panel-'+t).classList.toggle('active', t===name);
+      var btn = document.getElementById('tab-'+t);
+      btn.classList.toggle('active', t===name);
+      if (t===name) { btn.style.background='#003366'; btn.style.color='#fff'; btn.style.borderColor='#003366'; }
+      else          { btn.style.background='#fff'; btn.style.color='#003366'; btn.style.borderColor='rgba(0,0,0,0.12)'; }
+    });
+    // animate bars when switching to chart or treatment
+    if (name==='chart') animateChartBars();
+    if (name==='treatment') animateTpBars();
+  }
+
+  // -- TAB A: THE CHART --
+  function buildChart() {
+    const gpaPct  = Math.min(100, Math.round((DB.gpa / 3.85) * 100));
+    var mcatPct = mcatBarPct(DB.mcat);
+    const hrsPct  = Math.min(100, Math.round((DB.hoursNum / 150) * 100));
+
+    document.getElementById('db-gpa-val').textContent  = DB.gpa.toFixed(2);
+    document.getElementById('db-mcat-val').textContent = DB.mcat || ' - ';
+    document.getElementById('db-hrs-val').textContent  = DB.hoursNum;
+    document.getElementById('db-score-val').textContent = DB.score;
+
+    var setTag = function(id, pct) {
+      var el = document.getElementById(id);
+      el.textContent = tagLabel(pct);
+      el.style.cssText = tagStyle(pct);
+    };
+    setTag('db-gpa-tag', gpaPct);
+    setTag('db-mcat-tag', mcatPct);
+    setTag('db-hrs-tag', hrsPct);
+
+    var tv = document.getElementById('db-tier-val');
+    tv.textContent = DB.tier;
+    tv.style.cssText = badgeStyle(DB.score);
+
+    document.getElementById('db-gpa-bar-label').textContent  = DB.gpa.toFixed(2) + ' / 3.85 target';
+    document.getElementById('db-mcat-bar-label').textContent = (DB.mcat || '-') + ' / 515 target';
+    document.getElementById('db-hrs-bar-label').textContent  = DB.hoursNum + ' / 150 target';
+
+    document.getElementById('db-gpa-bar').dataset.target  = gpaPct;
+    document.getElementById('db-gpa-bar').style.background = barColor(gpaPct);
+    document.getElementById('db-mcat-bar').dataset.target = mcatPct;
+    document.getElementById('db-mcat-bar').style.background = barColor(mcatPct);
+    document.getElementById('db-hrs-bar').dataset.target  = hrsPct;
+    document.getElementById('db-hrs-bar').style.background = barColor(hrsPct);
+
+    // school chips
+    var schools = schoolsFromScore(DB.score);
+    var container = document.getElementById('db-school-chips');
+    container.innerHTML = schools.map(function(sc) {
+      return '<span style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.9rem;border-radius:9999px;font-size:0.8rem;font-weight:600;border:1px solid rgba(0,0,0,0.1);background:#fff;color:#003366;">'
+        + '<span class="match-badge ' + sc.cls + '" style="font-size:0.65rem;">' + sc.status + '</span> ' + sc.name
+        + '</span>';
+    }).join('');
+  }
+
+  function animateChartBars() {
+    ['db-gpa-bar','db-mcat-bar','db-hrs-bar'].forEach(function(id) {
+      var el = document.getElementById(id);
+      el.style.width = '0%';
+      setTimeout(function() { el.style.width = (el.dataset.target || 0) + '%'; }, 80);
+    });
+  }
+
+  // -- TAB B: TREATMENT PLAN --
+  function buildTreatment() {
+    const gpaPct  = Math.min(100, Math.round((DB.gpa / 3.85) * 100));
+    var mcatPct = mcatBarPct(DB.mcat);
+    const hrsPct  = Math.min(100, Math.round((DB.hoursNum / 150) * 100));
+
+    // Gap bars
+    document.getElementById('tp-gpa-label').textContent  = DB.gpa.toFixed(2) + ' / 3.85';
+    document.getElementById('tp-mcat-label').textContent = (DB.mcat || '-') + ' / 515';
+    document.getElementById('tp-hrs-label').textContent  = DB.hoursNum + ' / 150 hrs';
+    document.getElementById('tp-gpa-bar').dataset.target  = gpaPct;
+    document.getElementById('tp-gpa-bar').style.background = barColor(gpaPct);
+    document.getElementById('tp-mcat-bar').dataset.target = mcatPct;
+    document.getElementById('tp-mcat-bar').style.background = barColor(mcatPct);
+    document.getElementById('tp-hrs-bar').dataset.target  = hrsPct;
+    document.getElementById('tp-hrs-bar').style.background = barColor(hrsPct);
+
+    // Build action items
+    var actions = buildActionItems();
+    DB.checkboxStates = {};
+    actions.forEach(function(a, i) { DB.checkboxStates[i] = false; });
+
+    // Focus card
+    document.getElementById('tp-focus-title').textContent = actions[0].title;
+    document.getElementById('tp-focus-sub').textContent   = actions[0].firstStep;
+
+    // Action cards
+    var cardsEl = document.getElementById('tp-action-cards');
+    cardsEl.innerHTML = actions.map(function(a, i) {
+      var priorityColor = a.color==='red' ? '#B91C1C' : a.color==='yellow' ? '#B45309' : '#059669';
+      var stepsHtml = a.steps.map(function(step) { return '<li>' + step + '</li>'; }).join('');
+      return '<div class="action-card priority-' + a.color + '">'
+        + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.6rem;">'
+        + '<div>'
+        + '<span style="font-size:0.7rem;font-weight:700;color:' + priorityColor + ';text-transform:uppercase;letter-spacing:0.06em;">' + a.priority + '</span>'
+        + '<h3 style="font-size:1rem;font-weight:700;color:#003366;margin:0.2rem 0 0;">' + a.title + '</h3>'
+        + '</div>'
+        + '<span style="font-size:0.75rem;color:#9CA3AF;white-space:nowrap;padding-top:0.2rem;">' + a.timeline + '</span>'
+        + '</div>'
+        + '<p style="font-size:0.875rem;color:#6B7280;margin:0 0 0.75rem;line-height:1.6;">' + a.advice + '</p>'
+        + '<ul style="margin:0 0 0.5rem;padding-left:1.1rem;color:#374151;font-size:0.85rem;line-height:1.8;">' + stepsHtml + '</ul>'
+        + '</div>';
+    }).join('');
+
+    // Combo insight
+    var combo = getComboInsight();
+    if (combo) {
+      document.getElementById('tp-combo-card').style.display = 'block';
+      document.getElementById('tp-combo-text').textContent = combo;
+    }
+
+    // Checklist
+    var cl = document.getElementById('tp-checklist');
+    cl.innerHTML = actions.map(function(a, i) {
+      return '<div class="checkbox-item" id="chk-row-' + i + '" onclick="toggleCheck(' + i + ', ' + actions.length + ')">'
+        + '<input type="checkbox" id="chk-' + i + '" />'
+        + '<span style="font-size:0.875rem;color:#374151;">' + a.title + '</span>'
+        + '</div>';
+    }).join('');
+    updateProgress(actions.length);
+  }
+
+  function animateTpBars() {
+    ['tp-gpa-bar','tp-mcat-bar','tp-hrs-bar'].forEach(function(id) {
+      var el = document.getElementById(id);
+      el.style.width = '0%';
+      setTimeout(function() { el.style.width = (el.dataset.target || 0) + '%'; }, 80);
+    });
+  }
+
+  function toggleCheck(i, total) {
+    DB.checkboxStates[i] = !DB.checkboxStates[i];
+    const cb  = document.getElementById('chk-'+i);
+    var row = document.getElementById('chk-row-'+i);
+    cb.checked = DB.checkboxStates[i];
+    row.classList.toggle('checked', DB.checkboxStates[i]);
+    updateProgress(total);
+  }
+
+  function updateProgress(total) {
+    var done = Object.values(DB.checkboxStates).filter(Boolean).length;
+    document.getElementById('tp-progress-label').textContent = done + ' of ' + total + ' goals in progress';
+    document.getElementById('tp-progress-bar').style.width = (total > 0 ? Math.round((done/total)*100) : 0) + '%';
+  }
+
+  function buildActionItems() {
+    var items = [];
+    // GPA action
+    let gpaTitle, gpaAdvice, gpaSteps, gpaTimeline, gpaColor, gpaFirstStep;
+    if (DB.gpa >= 3.85) {
+      gpaColor='green'; gpaTimeline='Ongoing'; gpaFirstStep='Keep your study habits consistent through your final year.';
+      gpaTitle='Maintain Your GPA';
+      gpaAdvice='Your GPA is competitive for Ontario schools. Admissions committees look for trends  -  consistency through your final year matters as much as the number itself.';
+      gpaSteps=['Continue your current study schedule','Focus on science GPA  -  bio, chem, and physics carry extra weight','Avoid course load drops in your final year'];
+    } else if (DB.gpa >= 3.7) {
+      gpaColor='yellow'; gpaTimeline='1 semester'; gpaFirstStep='Identify which courses are dragging your GPA and target them this term.';
+      gpaTitle='Push Your GPA Over the Threshold';
+      gpaAdvice="You're within striking distance of the 3.85 target. One strong semester can get you there. A high MCAT can also partially offset a GPA that's slightly below average.";
+      gpaSteps=['Target upper-year science courses for GPA recovery','Meet with your academic advisor about grade replacement options','Pair GPA improvement with strong MCAT prep as a compensating strategy'];
+    } else if (DB.gpa >= 3.5) {
+      gpaColor='yellow'; gpaTimeline='1-2 years'; gpaFirstStep='Enroll in 1-2 upper-level science courses next term and aim for 90%+.';
+      gpaTitle='Strengthen Your Academic Record';
+      gpaAdvice='Your GPA needs meaningful improvement. Taking upper-level science courses and excelling demonstrates you can handle medical school rigor. Aim for 3.8+ in any additional coursework.';
+      gpaSteps=['Take upper-level biology, chemistry, or physiology courses','Aim for a 3.8+ in any additional coursework to show upward trend','A post-bac program is worth considering if you have a full year available'];
+    } else if (DB.gpa >= 3.3) {
+      gpaColor='red'; gpaTimeline='1-2 years'; gpaFirstStep='Research post-baccalaureate programs and speak to a pre-med advisor this week.';
+      gpaTitle='Rebuild Your Academic Foundation';
+      gpaAdvice='Your GPA is below the competitive floor for most Ontario schools. A post-bac program or additional upper-year coursework is strongly recommended. An upward trend is everything  -  committees want to see you can do the work.';
+      gpaSteps=['Enroll in a formal post-baccalaureate pre-med program','Target advanced science courses  -  the harder the course, the more impressive the grade','Pair this with your strongest MCAT performance to offset the gap'];
+    } else {
+      gpaColor='red'; gpaTimeline='2-3 years'; gpaFirstStep='Book a consultation with a pre-med advisor to map out a realistic 2-year plan.';
+      gpaTitle='Significant Academic Rebuilding Required';
+      gpaAdvice="Your GPA is significantly below competitive thresholds. A Special Master's Program (SMP) or master's degree in a science field is the most credible path forward. The higher credit requirements have a larger GPA impact than a standard post-bac.";
+      gpaSteps=["Consider an SMP (Special Master's Program)  -  it simulates medical school and signals real readiness","A master's degree in life sciences is another strong option","In your personal statement, address your trajectory honestly  -  committees respect resilience"];
+    }
+    items.push({ title:gpaTitle, advice:gpaAdvice, steps:gpaSteps, timeline:gpaTimeline, color:gpaColor, priority: gpaColor==='red'?' Critical':gpaColor==='yellow'?' Important':' Maintain', firstStep:gpaFirstStep });
+
+    // MCAT action
+    let mcatTitle, mcatAdvice, mcatSteps, mcatTimeline, mcatColor, mcatFirstStep;
+    if (!DB.mcat || DB.mcat === 0) {
+      mcatColor='red'; mcatTimeline='3-6 months'; mcatFirstStep='Register for the MCAT today and set a test date 3-4 months out.';
+      mcatTitle='Register for the MCAT';
+      mcatAdvice='You have not yet logged an MCAT score. This is a critical step  -  most Ontario schools require it. The AAMC recommends 300-350 hours of total prep. Summer is the ideal time to write.';
+      mcatSteps=['Register at aamc.org  -  pick a date 3-4 months out','Start with a diagnostic test to identify your baseline','Use AAMC official materials above all third-party resources'];
+    } else if (DB.mcat >= 515) {
+      mcatColor='green'; mcatTimeline='Ongoing'; mcatFirstStep='Maintain your prep habits and focus energy on other application components.';
+      mcatTitle='Maintain Your MCAT Strength';
+      mcatAdvice='Your MCAT is above the competitive average of ~512. A 515+ signals you can handle the academic rigour of medical school. Note: McMaster only considers your CARS score (min. 123).';
+      mcatSteps=['Keep your science knowledge fresh with periodic review','For McMaster, ensure your CARS section is specifically strong (target 127+)','Redirect prep energy toward CASPer and your Autobiographical Sketch (ABS)'];
+    } else if (DB.mcat >= 510) {
+      mcatColor='yellow'; mcatTimeline='1 prep cycle (3-4 months)'; mcatFirstStep='Take a full diagnostic test to identify which section is pulling your score down.';
+      mcatTitle='Target a 515+ on Your Next Attempt';
+      mcatAdvice="You're close but below the 515 target. One focused prep cycle can close this gap. Practice questions are more valuable than content review at this stage  -  use AAMC full-length exams strategically.";
+      mcatSteps=['Take 3-4 AAMC full-length practice exams and review every wrong answer thoroughly','For CARS: develop a consistent annotation strategy and never stop the timer on practice tests','Focus extra time on your weakest section  -  identify it from your diagnostic'];
+    } else if (DB.mcat >= 505) {
+      mcatColor='yellow'; mcatTimeline='1 full prep cycle (4-5 months)'; mcatFirstStep='Divide your prep into Phase 1 (content review) and Phase 2 (practice tests). Start Phase 1 now.';
+      mcatTitle='Structured Retake Needed';
+      mcatAdvice='Your score is below the competitive threshold for most Ontario schools. A structured retake with a full study plan is recommended. The AAMC recommends 300-350 total prep hours  -  assess whether you hit that.';
+      mcatSteps=['Divide prep into: Phase 1 content review -> Phase 2 practice tests -> Phase 3 refinement','Consider a prep course or 10-20 hours with a tutor who scored 515+','Do NOT waste AAMC full-length exams  -  each one is irreplaceable practice','Note: McMaster only needs CARS 123+  -  a targeted CARS strategy may open this door sooner'];
+    } else if (DB.mcat >= 500) {
+      mcatColor='red'; mcatTimeline='5-6 months'; mcatFirstStep='Assess your study habits honestly  -  time spent is not the same as effective studying.';
+      mcatTitle='MCAT Score Requires Significant Improvement';
+      mcatAdvice='Your score is below 500  -  a meaningful retake is necessary. Reevaluate your study strategy entirely. Top scorers spend 300-350 hours and review every practice exam strategically, extracting maximum learning from each one.';
+      mcatSteps=['Get a tutor or structured course  -  the opportunity cost of a third write is enormous','Identify your weakest section and dedicate 60% of prep time to it','Use the Jack Westin or Blueprint MCAT diagnostic to pinpoint gaps precisely','NOSM does not require the MCAT  -  consider it as an option while you prep'];
+    } else {
+      mcatColor='red'; mcatTimeline='6+ months'; mcatFirstStep='Step back from applications this cycle. Commit fully to MCAT prep.';
+      mcatTitle='MCAT Is Your Biggest Barrier Right Now';
+      mcatAdvice='A score below 500 severely limits your options. A comprehensive retake with professional support is essential. 82% of students who scored above 517 were accepted  -  this investment directly changes your outcome.';
+      mcatSteps=['Do not apply this cycle  -  a weak MCAT wastes application fees and opportunities','Work with a tutor who scored 515+ for 15-20 hours of strategy sessions','Use AAMC official materials exclusively for CARS','NOSM (no MCAT required) and some DO programs are valid near-term pathways'];
+    }
+    items.push({ title:mcatTitle, advice:mcatAdvice, steps:mcatSteps, timeline:mcatTimeline, color:mcatColor, priority: mcatColor==='red'?' Critical':mcatColor==='yellow'?' Important':' Maintain', firstStep:mcatFirstStep });
+
+    // Hours action
+    let hrsTitle, hrsAdvice, hrsSteps, hrsTimeline, hrsColor, hrsFirstStep;
+    if (DB.hoursNum >= 150) {
+      hrsColor='green'; hrsTimeline='Ongoing'; hrsFirstStep='Start a clinical journal  -  document key moments for your personal statement.';
+      hrsTitle='Convert Hours Into Stories';
+      hrsAdvice="You're in the competitive range. Quality and reflection now matter more than accumulating additional hours. Admissions committees want to know what you learned  -  not just that you showed up.";
+      hrsSteps=["Keep a clinical journal: log moments that surprised you, challenged you, or confirmed medicine is right for you","Aim to diversify settings  -  if you've only shadowed, add hands-on patient care experience",'These reflections become the backbone of your ABS and interview answers'];
+    } else if (DB.hoursNum >= 100) {
+      hrsColor='yellow'; hrsTimeline='6-8 months'; hrsFirstStep='Plan 3-4 hours of clinical experience per week starting next month.';
+      hrsTitle='Reach the 150-Hour Milestone';
+      hrsAdvice='You are on track but need to reach 150+ hours before applying. Longevity signals sustained dedication  -  plan 2-4 hours per week over several months rather than cramming.';
+      hrsSteps=['Commit to a consistent weekly schedule (2-4 hrs/week for 6-8 months)','Diversify: add physician shadowing across at least 2 specialties (target 40-60 hrs)','Start documenting your experiences now  -  your future self will thank you'];
+    } else if (DB.hoursNum >= 50) {
+      hrsColor='red'; hrsTimeline='8-12 months'; hrsFirstStep='Contact your university pre-med office this week for clinical volunteer opportunities.';
+      hrsTitle='Build Your Clinical Foundation';
+      hrsAdvice="You're significantly below the competitive floor. Clinical experience is the #2 most important factor after GPA/MCAT. Without it, admissions committees have no evidence you understand what medicine actually looks like. Start immediately.";
+      hrsSteps=['Apply to hospital volunteer programs (most have 3-6 month waitlists  -  start today)','Becoming a medical scribe is one of the fastest ways to gain 100+ meaningful hours','EMT certification gives direct patient care experience and makes you stand out','Target at least 2 different clinical settings to show breadth'];
+    } else {
+      hrsColor='red'; hrsTimeline='12+ months'; hrsFirstStep='Apply to at least 2 clinical volunteer programs this week, today.';
+      hrsTitle='Clinical Hours Are Urgently Needed';
+      hrsAdvice="You have almost no clinical experience on record. This is a critical gap  -  without it, it's very difficult to justify wanting to become a physician to an admissions committee. This is fixable, but needs to start immediately.";
+      hrsSteps=["Apply to hospital volunteering, hospice volunteering, or a free clinic  -  don't wait for the perfect opportunity",'A medical scribe position gives 100+ hours of direct clinical exposure relatively quickly','Add physician shadowing in 2-3 specialties (40-60 hours target)','Use every hour to build your narrative: why medicine, why you?'];
+    }
+    items.push({ title:hrsTitle, advice:hrsAdvice, steps:hrsSteps, timeline:hrsTimeline, color:hrsColor, priority: hrsColor==='red'?' Critical':hrsColor==='yellow'?' Important':' Maintain', firstStep:hrsFirstStep });
+
+    // Sort: red first, then yellow, then green
+    var order = { red:0, yellow:1, green:2 };
+    return items.sort(function(a, b) { return order[a.color] - order[b.color]; });
+  }
+
+  function getComboInsight() {
+    var g = DB.gpa, m = DB.mcat, h = DB.hoursNum, s = DB.score;
+    if (g >= 3.7 && m > 0 && m < 505) return "Your GPA shows you can do hard academic work  -  the MCAT is your unlock. One strong prep cycle is the single highest-leverage move available to you right now.";
+    if (h < 100 && s < 65)            return "Clinical hours are your fastest win. They're achievable in weeks, not years  -  and they'll give you the stories that make every other part of your application stronger.";
+    if (s >= 72 && s < 78)            return "You're one strong cycle away from a competitive application. Resist the urge to apply this year  -  waiting one semester to sharpen your weakest area will meaningfully change your outcomes.";
+    if (s >= 85)                       return "Your profile is interview-ready. Shift your focus to your Autobiographical Sketch (ABS), CASPer prep, and school-specific supplemental essays  -  that's where competitive applicants differentiate now.";
+    if (g >= 3.85 && (!m || m < 510)) return "Your GPA is strong  -  it proves the intellectual capacity. Pair it with a 510+ MCAT and you unlock the top tier of Ontario schools. That's your clearest path from here.";
+    return null;
+  }
+
+  // -- TAB C: DIFFERENTIAL --
+  var SCHOOL_DATA = [
+    { name:'University of Toronto', short:'UofT', gpaMin:3.6, gpaAvg:3.89, mcatAvg:520, mcatNote:'Full MCAT required', casper:false, note:'Hard GPA cutoff of 3.6 on OMSAS scale. 4 short essays required.' },
+    { name:'McMaster',              short:'McMaster', gpaMin:3.0, gpaAvg:3.95, mcatAvg:null, mcatNote:'CARS only (min 123)', casper:true,  note:'CARS score is the only MCAT component considered. Problem-based learning model.' },
+    { name:"Queen's University",    short:"Queen's",  gpaMin:3.0, gpaAvg:3.78, mcatAvg:515, mcatNote:'Full MCAT required', casper:true,  note:'CASPer required. ~100-140 spots. Panel + MMI interview.' },
+    { name:'Western (Schulich)',    short:'Western',  gpaMin:3.0, gpaAvg:3.82, mcatAvg:515, mcatNote:'Full MCAT required', casper:false, note:'No CASPer. Leadership & advocacy written statements required.' },
+    { name:'University of Ottawa',  short:'Ottawa',   gpaMin:3.0, gpaAvg:3.78, mcatAvg:510, mcatNote:'Full MCAT required', casper:true,  note:'French stream available. CASPer required.' },
+    { name:'TMU',                   short:'TMU',      gpaMin:3.0, gpaAvg:3.70, mcatAvg:506, mcatNote:'Full MCAT required', casper:false, note:'Newer school. More holistic review. No CASPer.' },
+    { name:'NOSM',                  short:'NOSM',     gpaMin:3.0, gpaAvg:3.65, mcatAvg:null, mcatNote:'MCAT NOT required',  casper:false, note:'Prioritises Northern Ontario & rural applicants. No MCAT needed.' },
+  ];
+
+  function buildDifferential() {
+    var container = document.getElementById('diff-cards');
+    container.innerHTML = SCHOOL_DATA.map(function(sc) {
+      var gpaStr = DB.gpa >= (sc.gpaAvg - 0.05) ? 'match-green' : DB.gpa >= sc.gpaMin ? 'match-yellow' : 'match-red';
+      var gpaLbl = DB.gpa >= (sc.gpaAvg - 0.05) ? 'Meets avg' : DB.gpa >= sc.gpaMin ? 'Above min' : 'Below min';
+      var mcatStr, mcatLbl;
+      if (!sc.mcatAvg) { mcatStr='match-green'; mcatLbl='N/A'; }
+      else {
+        mcatStr = DB.mcat >= sc.mcatAvg ? 'match-green' : DB.mcat >= (sc.mcatAvg - 8) ? 'match-yellow' : 'match-red';
+        mcatLbl = DB.mcat >= sc.mcatAvg ? 'Meets avg' : DB.mcat > 0 ? 'Gap: ' + (sc.mcatAvg - DB.mcat) + ' pts' : 'Not taken';
+      }
+      var overall = (gpaStr==='match-red' || mcatStr==='match-red') ? 'match-red' : (gpaStr==='match-yellow'||mcatStr==='match-yellow') ? 'match-yellow' : 'match-green';
+      var overallLbl = overall==='match-green' ? 'Strong Fit' : overall==='match-yellow' ? 'Possible' : 'Out of Range';
+      var casperNote = sc.casper ? ' &middot; CASPer required' : '';
+      return '<div class="school-row" style="flex-wrap:wrap;gap:0.5rem;align-items:center;padding:1rem 1.25rem;margin-bottom:0.5rem;">'
+        + '<div style="flex:1;min-width:140px;">'
+        + '<p style="font-size:0.9rem;font-weight:700;color:#003366;margin:0;">' + sc.name + '</p>'
+        + '<p style="font-size:0.75rem;color:#9CA3AF;margin:0.1rem 0 0;">' + sc.mcatNote + casperNote + '</p>'
+        + '</div>'
+        + '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;align-items:center;">'
+        + '<span style="font-size:0.75rem;color:#6B7280;">GPA:</span>'
+        + '<span class="match-badge ' + gpaStr + '">' + DB.gpa.toFixed(2) + ' - ' + gpaLbl + '</span>'
+        + '<span style="font-size:0.75rem;color:#6B7280;">MCAT:</span>'
+        + '<span class="match-badge ' + mcatStr + '">' + (DB.mcat||'-') + ' - ' + mcatLbl + '</span>'
+        + '<span class="match-badge ' + overall + '" style="font-weight:700;">' + overallLbl + '</span>'
+        + '</div>'
+        + '<p style="width:100%;font-size:0.78rem;color:#9CA3AF;margin:0.3rem 0 0;">' + sc.note + '</p>'
+        + '</div>';
+    }).join('');
+  }
+
+  // -- TAB D: LAB RESULTS --
+  function buildLab() {
+    document.getElementById('lab-gpa').value   = DB.gpa;
+    document.getElementById('lab-mcat').value  = DB.mcat;
+    document.getElementById('lab-hours').value = DB.hoursVal;
+    recalcLab();
+  }
+
+  function recalcLab() {
+    var g = parseFloat(document.getElementById('lab-gpa').value)  || 0;
+    var m = parseFloat(document.getElementById('lab-mcat').value) || 0;
+    var h = document.getElementById('lab-hours').value || 'low';
+    var result = calcScore(g, m, h);
+    var score = result.score;
+    var tier = tierFromScore(score);
+    var delta = score - DB.score;
+
+    document.getElementById('lab-score').textContent = score;
+    var deltaEl = document.getElementById('lab-delta');
+    deltaEl.textContent = delta === 0 ? '(current)' : delta > 0 ? ('+ ' + delta + ' vs current') : (delta + ' vs current');
+    deltaEl.style.color = delta > 0 ? '#059669' : delta < 0 ? '#B91C1C' : '#9CA3AF';
+
+    var tierEl = document.getElementById('lab-tier');
+    tierEl.textContent = tier;
+    tierEl.style.cssText = badgeStyle(score) + 'border-radius:9999px;padding:0.3rem 0.9rem;font-size:0.875rem;font-weight:600;';
+
+    var schoolsEl = document.getElementById('lab-schools');
+    var labSchools = schoolsFromScore(score);
+    schoolsEl.innerHTML = labSchools.map(function(sc) {
+      return '<div class="school-row" style="margin-bottom:0.4rem;">'
+        + '<span style="font-size:0.875rem;font-weight:600;color:#003366;">' + sc.name + '</span>'
+        + '<span class="match-badge ' + sc.cls + '">' + sc.status + '</span>'
+        + '</div>';
+    }).join('');
   }
 
   // FAQ accordion
-  document.querySelectorAll('.faq-trigger').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const answer = btn.nextElementSibling;
-      const chevron = btn.querySelector('.faq-chevron');
-      const isOpen = answer.classList.contains('open');
-      // Close all
-      document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
-      document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('open'));
-      // Open clicked if was closed
-      if (!isOpen) {
-        answer.classList.add('open');
-        chevron.classList.add('open');
-      }
+  document.querySelectorAll('.faq-trigger').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var answer = btn.nextElementSibling;
+      var chevron = btn.querySelector('.faq-chevron');
+      var isOpen = answer.classList.contains('open');
+      document.querySelectorAll('.faq-answer').forEach(function(a) { a.classList.remove('open'); });
+      document.querySelectorAll('.faq-chevron').forEach(function(c) { c.classList.remove('open'); });
+      if (!isOpen) { answer.classList.add('open'); chevron.classList.add('open'); }
     });
   });
 </script>
