@@ -1,6 +1,6 @@
 # ClarusMD TODO
 
-This tracker reflects the current MVP state of the ClarusMD application and the next implementation fixes still pending.
+This tracker reflects the current MVP state of the ClarusMD application. The core single-file HTML app is functioning, so this file now focuses on polish, consistency, and the remaining known fixes.
 
 ## Current Status
 - [x] Landing page implemented
@@ -13,6 +13,7 @@ This tracker reflects the current MVP state of the ClarusMD application and the 
 - [x] Readiness score, tier badge, school matches, and recommendations implemented
 - [x] Dashboard flow implemented from results to dashboard
 - [x] Dashboard tabs implemented: The Chart, Treatment Plan, Differential, Lab Results
+- [x] Core MVP HTML experience is functioning end to end
 
 ## Pending Fixes
 - [ ] Adjust MCAT progress bar color thresholds so a score of `500` does not display as green
@@ -20,10 +21,10 @@ This tracker reflects the current MVP state of the ClarusMD application and the 
 - [ ] Update Lab Results school matching so maximum inputs (`GPA 3.85`, `MCAT 515`, `150+ hours`) show all schools as top matches
 
 ## Next Steps
-- [ ] Refine dashboard wording and status labels for clarity
-- [ ] Review school-fit logic consistency between Results and Lab Results
-- [ ] Verify progress bar thresholds across GPA, MCAT, hours, and readiness views
-- [ ] Add lightweight regression checks for scoring, tier assignment, and school matching
+- [ ] Final UI polish pass across landing, results, and dashboard states
+- [ ] Review school-fit logic consistency between Results, Differential, and Lab Results
+- [ ] Verify progress and badge thresholds across GPA, MCAT, hours, and readiness views
+- [ ] Add lightweight regression checks for scoring, tiers, recommendations, and school matching
 
 ## Future Enhancements
 - [ ] Expand beyond the current Ontario school set

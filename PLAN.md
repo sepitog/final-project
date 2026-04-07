@@ -3,7 +3,7 @@
 ClarusMD is currently in the MVP Implementation Phase. This document defines the system direction that guides [AGENTS.md](./AGENTS.md), task tracking in [TODO.md](./TODO.md), repository structure in [FILE-INDEX.md](./FILE-INDEX.md), and testing for MVP logic in [UNIT-TESTS.md](./UNIT-TESTS.md).
 
 ## Project Description
-ClarusMD is a web-based MVP application that helps pre-med students in Ontario evaluate their readiness for medical school using academic, extracurricular, and admissions-related information.
+ClarusMD is a functioning web-based MVP application that helps pre-med students in Ontario evaluate their readiness for medical school using academic, extracurricular, and admissions-related information.
 
 ## Project Goals
 - Collect relevant user academic and extracurricular data through a structured intake process.
@@ -19,7 +19,7 @@ The input layer gathers user profile data through a guided questionnaire coverin
 The processing layer evaluates submitted data against structured Ontario medical school criteria and transforms inputs into a match score, tier classification, school matches, and benchmark-based recommendations.
 
 ### Output Layer
-The output layer presents readiness results, school matches, benchmark-based recommendations, and an animated circular progress indicator.
+The output layer presents readiness results, school matches, benchmark-based recommendations, an animated circular progress indicator, and a multi-tab dashboard for deeper planning.
 
 ## Current Implementation Status
 - Landing page UI complete
@@ -29,12 +29,14 @@ The output layer presents readiness results, school matches, benchmark-based rec
 - School matching implemented
 - Recommendation engine implemented
 - Results visualization (circular animation) implemented
+- Dashboard implemented
+- Single-file HTML MVP functioning end to end
 
 ## Core Components
 - Questionnaire module for collecting applicant data in a structured format.
 - Matching engine for comparing user inputs against medical school requirements.
 - Recommendation system for producing improvement guidance based on identified gaps.
-- Progress tracking system for supporting future re-evaluation and longitudinal readiness monitoring.
+- Dashboard and progress tracking system for supporting re-evaluation and longitudinal readiness monitoring.
 
 ## Data Strategy
 - User data should represent self-reported academic, extracurricular, and profile information collected through the questionnaire.
@@ -56,7 +58,7 @@ This flow keeps ClarusMD organized as a pipeline rather than a set of disconnect
 ## Scope Boundaries
 - The current phases do not include live admissions data, automated school data syncing, or external account connections.
 - The project does not yet include production deployment, operational infrastructure, or external integrations.
-- The current scope is limited to the implemented MVP questionnaire, scoring, matching, recommendations, and results experience.
+- The current scope is limited to the implemented MVP landing page, questionnaire, scoring, matching, recommendations, results experience, and dashboard.
 
 ## Future AI Integration
 - ClarusMD may later use AI to explain match results in clearer language, surface personalized recommendation themes, or summarize progress patterns over time.

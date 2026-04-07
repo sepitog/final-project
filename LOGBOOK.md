@@ -66,3 +66,19 @@
 - Developed the scoring system and tier classification.
 - Implemented school matching and the benchmark-based recommendation engine.
 - Added the animated circular progress indicator for results visualization.
+
+## April 7, 2026
+
+### Actions
+- Completed the functioning single-file HTML MVP flow from landing page to questionnaire, results, and dashboard.
+- Added project-level documentation for README, changelog, feature reference, and current contributor guidance.
+- Consolidated remaining work around known logic and labeling fixes rather than core feature implementation.
+
+### Observations
+- ClarusMD now reads as a working application with supporting project documentation rather than an in-progress scaffold.
+- The remaining work is concentrated in threshold tuning, wording clarity, and consistency across results and simulator views.
+
+### Next Steps
+- Resolve the remaining MCAT progress bar threshold issue.
+- Replace ambiguous strongest-state tag wording with clearer labels.
+- Align top-tier school matching logic across results and Lab Results.
