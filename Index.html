@@ -846,32 +846,56 @@ tailwind.config = {
     const hoursVal = document.getElementById('input-hours').value;
 
     // Score calculation
-    const hoursPoints = { low: 8, medium: 14, high: 20 };
-    const hoursNum    = { low: 50, medium: 100, high: 150 };
-    const gpaScore    = (gpa / 4.0) * 50;
-    const mcatScore   = (mcat / 528) * 30;
-    const hrsScore    = hoursPoints[hoursVal] || 0;
-    const score       = Math.round(gpaScore + mcatScore + hrsScore);
+    const hoursNum = { low: 50, medium: 100, high: 150 };
+
+    let gpaScore;
+    if (gpa >= 3.9)      gpaScore = 50;
+    else if (gpa >= 3.85) gpaScore = 47;
+    else if (gpa >= 3.7)  gpaScore = 42;
+    else if (gpa >= 3.5)  gpaScore = 35;
+    else if (gpa >= 3.3)  gpaScore = 28;
+    else if (gpa >= 3.0)  gpaScore = 20;
+    else                  gpaScore = 10;
+
+    let mcatScore;
+    if (mcat >= 520)      mcatScore = 30;
+    else if (mcat >= 515) mcatScore = 27;
+    else if (mcat >= 510) mcatScore = 23;
+    else if (mcat >= 505) mcatScore = 18;
+    else if (mcat >= 500) mcatScore = 12;
+    else                  mcatScore = 5;
+
+    let hrsScore;
+    const actualHoursVal = hoursNum[hoursVal] || 50;
+    if (actualHoursVal >= 150)      hrsScore = 20;
+    else if (actualHoursVal >= 100) hrsScore = 15;
+    else if (actualHoursVal >= 50)  hrsScore = 10;
+    else                            hrsScore = 5;
+
+    let rawScore = gpaScore + mcatScore + hrsScore;
+    if (gpa < 3.3)  rawScore = rawScore * 0.85;
+    if (mcat < 500) rawScore = rawScore * 0.9;
+    const score = Math.round(rawScore);
 
     // Tier
     let tier;
     if (score >= 85)      tier = 'Highly Competitive';
     else if (score >= 75) tier = 'Competitive';
-    else if (score >= 60) tier = 'Developing';
-    else                  tier = 'Early Stage';
+    else if (score >= 65) tier = 'Borderline Competitive';
+    else                  tier = 'Not Competitive';
 
     // Schools
     let schools;
-    if (score >= 85)      schools = '<strong>Top Matches:</strong> UofT, McMaster &nbsp;·&nbsp; <strong>Also Apply:</strong> Queen\'s, Western';
-    else if (score >= 75) schools = '<strong>Strong Matches:</strong> Queen\'s, Western &nbsp;·&nbsp; <strong>Also Consider:</strong> Ottawa, TMU';
-    else if (score >= 60) schools = '<strong>Realistic:</strong> Ottawa, TMU &nbsp;·&nbsp; <strong>Stretch:</strong> Western';
-    else                  schools = 'Not currently competitive for Ontario MD programs. Focus on building your foundation.';
+    if (score >= 85)      schools = '<strong>Top Matches:</strong> UofT, McMaster, Queen\'s &nbsp;·&nbsp; <strong>Also Apply:</strong> Western';
+    else if (score >= 75) schools = '<strong>Strong Matches:</strong> Western, Queen\'s &nbsp;·&nbsp; <strong>Also Consider:</strong> Ottawa';
+    else if (score >= 65) schools = '<strong>Realistic:</strong> Ottawa, TMU &nbsp;·&nbsp; <strong>Stretch:</strong> Western';
+    else                  schools = '<strong>Options:</strong> TMU, NOSM &nbsp;·&nbsp; Focus on improving your profile before applying broadly.';
 
     // Recommendations
     const GPA_TARGET   = 3.85;
     const MCAT_TARGET  = 515;
     const HOURS_TARGET = 150;
-    const actualHours  = hoursNum[hoursVal] || 50;
+    const actualHours  = actualHoursVal;
 
     const gpaGap   = Math.max(0, GPA_TARGET - gpa);
     const mcatGap  = Math.max(0, MCAT_TARGET - mcat);
