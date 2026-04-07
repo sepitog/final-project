@@ -38,7 +38,9 @@
 ### Ontario School Coverage
 - Added school comparison coverage for University of Toronto (`UofT`), McMaster, Queen's University, Western (`Schulich`), University of Ottawa, TMU, and NOSM
 
-### Known Issues
-- MCAT progress bar threshold coloring still needs adjustment so `500` does not appear green
-- One stat tag still shows `Strong OK` and needs clearer wording
-- Lab Results school matching still underrates top-input scenarios for Western, Ottawa, TMU, and NOSM
+### Fixed
+- Adjusted MCAT progress bar color thresholds so a score of `500` no longer displays as green — scores below `505` now show yellow and scores below `500` show red
+- Replaced the ambiguous stat card tag label `Strong OK` with clearer status wording
+- Updated Lab Results school matching so that maximum inputs of GPA `3.85`, MCAT `515`, and `150+` hours correctly show all schools as top matches
+
+MVP status: Complete as of April 7 2026.

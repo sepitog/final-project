@@ -33,52 +33,40 @@
 ### Actions
 - Standardized the project identity and documentation system under the ClarusMD name.
 - Updated the repository from a planning-phase structure to an MVP implementation-phase system.
-- Integrated the ClarusMD landing page UI as the current application entry point.
-- Began active MVP development for questionnaire, scoring, and recommendation workflows.
+- Completed the full single-file HTML MVP including the landing page, questionnaire, scoring system, results page, and four-tab dashboard.
+- Resolved the remaining known bugs in MCAT bar color thresholds, stat card tag wording, and Lab Results school matching.
+- Added and finalized project documentation including `README.md`, `CHANGELOG.md`, `FEATURES.md`, `TODO.md`, and `FutureClarusMD.md`.
 
 ### Reasoning
 - The project now needs implementation-ready documentation that matches the real application direction.
 - Aligning naming, scope, and task tracking reduces confusion as code and documentation begin evolving together.
-- Moving from concept to MVP requires the documentation loop to support active build work instead of research-only planning.
+- Closing out the MVP requires the documentation loop to reflect a completed, functioning application rather than active build work.
 
 ### Observations
-- ClarusMD now reads as a working application in progress rather than a future concept.
-- The architecture remains stable, but the status of each layer now reflects active implementation.
-- The next priority is connecting the landing experience to the questionnaire and processing pipeline.
+- ClarusMD now reads as a fully functional single-file HTML application rather than a future concept.
+- The architecture remains stable, and the status of each layer now reflects completed MVP implementation.
+- The remaining work moves from MVP buildout to future roadmap planning.
 
 ### Next Steps
-- Continue `Build navigation from landing page to questionnaire` in [TODO.md](./TODO.md).
-- Continue `Implement questionnaire inputs for GPA, MCAT, and ECs` so the input layer becomes functional.
-- Continue `Develop scoring function` to support matching and recommendation output.
+- Finalize MVP-closeout documentation across the project files.
+- Preserve the completed MVP state while tracking future expansion separately.
+- Use [FutureClarusMD.md](./FutureClarusMD.md) as the reference for post-MVP development.
 
 ### Version Context
-- Current version: `v0.2` MVP implementation phase.
-- Next milestone: `v0.3` working questionnaire and scoring flow.
-- Future milestone: `v0.4` initial results dashboard and recommendation output.
-- Future milestone: `v1.0` complete ClarusMD MVP.
+- Current version: `v1.0` complete ClarusMD MVP.
+- Next milestone: `v1.1` post-MVP roadmap execution.
+- Future development is tracked in `FutureClarusMD.md`.
 
-## April 7, 2026
-
-### Actions
-- Transitioned the project from planning to MVP implementation phase.
-- Integrated the ClarusMD landing page UI.
-- Implemented the multi-step questionnaire system for GPA, MCAT, and hours.
-- Developed the scoring system and tier classification.
-- Implemented school matching and the benchmark-based recommendation engine.
-- Added the animated circular progress indicator for results visualization.
-
-## April 7, 2026
+## April 7, 2026 — MVP Complete
 
 ### Actions
-- Completed the functioning single-file HTML MVP flow from landing page to questionnaire, results, and dashboard.
-- Added project-level documentation for README, changelog, feature reference, and current contributor guidance.
-- Consolidated remaining work around known logic and labeling fixes rather than core feature implementation.
+- Marked the ClarusMD MVP as complete with all known issues resolved and all documentation finalized.
 
 ### Observations
-- ClarusMD now reads as a working application with supporting project documentation rather than an in-progress scaffold.
-- The remaining work is concentrated in threshold tuning, wording clarity, and consistency across results and simulator views.
+- ClarusMD is now a fully functional single-file HTML application ready for demonstration.
+- No pending fixes remain.
+- Future development is tracked in `FutureClarusMD.md`.
 
-### Next Steps
-- Resolve the remaining MCAT progress bar threshold issue.
-- Replace ambiguous strongest-state tag wording with clearer labels.
-- Align top-tier school matching logic across results and Lab Results.
+### Version Context
+- Current version: `v1.0` MVP complete.
+- Next milestone: `v1.1` which will address the Phase 1 roadmap items in `FutureClarusMD.md`.

@@ -1,6 +1,6 @@
 # ClarusMD Project Plan
 
-ClarusMD is currently in the MVP Implementation Phase. This document defines the system direction that guides [AGENTS.md](./AGENTS.md), task tracking in [TODO.md](./TODO.md), repository structure in [FILE-INDEX.md](./FILE-INDEX.md), and testing for MVP logic in [UNIT-TESTS.md](./UNIT-TESTS.md).
+ClarusMD has reached MVP completion. This document defines the system direction that guides [AGENTS.md](./AGENTS.md), task tracking in [TODO.md](./TODO.md), repository structure in [FILE-INDEX.md](./FILE-INDEX.md), and testing for MVP logic in [UNIT-TESTS.md](./UNIT-TESTS.md).
 
 ## Project Description
 ClarusMD is a functioning web-based MVP application that helps pre-med students in Ontario evaluate their readiness for medical school using academic, extracurricular, and admissions-related information.
@@ -24,13 +24,13 @@ The output layer presents readiness results, school matches, benchmark-based rec
 ## Current Implementation Status
 - Landing page UI complete
 - Multi-step questionnaire complete
-- Scoring system implemented
-- Tier classification implemented
-- School matching implemented
-- Recommendation engine implemented
-- Results visualization (circular animation) implemented
-- Dashboard implemented
-- Single-file HTML MVP functioning end to end
+- Scoring system complete
+- Tier classification complete
+- School matching complete
+- Recommendation engine complete
+- Results visualization (circular animation) complete
+- Dashboard complete
+- Single-file HTML MVP complete end to end
 
 ## Core Components
 - Questionnaire module for collecting applicant data in a structured format.
@@ -66,13 +66,24 @@ This flow keeps ClarusMD organized as a pipeline rather than a set of disconnect
 
 ## Development Phases
 ### Phase 1: Setup and Structure
+Complete
+
 Establish the project foundation, documentation system, initial file organization, and project controls.
 
 ### Phase 2: User Input
+Complete
+
 Implement the questionnaire module and define the academic, extracurricular, and profile fields required for evaluation.
 
 ### Phase 3: Matching System
+Complete
+
 Implement the matching engine, scoring logic, and comparison framework for Ontario medical school readiness.
 
 ### Phase 4: Recommendations and Tracking
+Complete
+
 Implement the recommendation workflow and expand the results experience so users can interpret outcomes and identify next steps.
+
+### Phase 5: Post-MVP Roadmap
+Phase 5 and beyond are documented in FutureClarusMD.md.
