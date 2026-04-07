@@ -88,7 +88,5 @@ ClarusMD is a single-file MVP web application that helps Ontario pre-med student
 ## Recommendation System
 The current recommendation layer is benchmark-based. It prioritizes the user's largest gap, provides a concrete next step, and expands advice inside the dashboard using source-backed guidance from AAMC, BeMo, Med School Insiders, Kaplan, Shemmassian Consulting, and Blueprint MCAT.
 
-## Known Issues
-- The MCAT progress bar currently shows green at a score of `500`, which overstates competitiveness
-- One stat card label still reads `Strong OK` and needs clearer wording
-- In `Lab Results`, perfect benchmark inputs do not yet mark all schools as top matches
+## Project Status
+The ClarusMD MVP is complete as of April 7 2026. All known issues have been resolved. The MCAT progress bar color thresholds have been corrected, the stat card tag label has been updated with clearer wording, and Lab Results school matching now correctly reflects top-match status at maximum inputs. Future development is tracked in FutureClarusMD.md.

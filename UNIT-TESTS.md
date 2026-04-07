@@ -1,5 +1,8 @@
 # ClarusMD MVP Testing Strategy
 
+## Testing Status
+The ClarusMD MVP was validated through manual end-to-end testing of the questionnaire, scoring, results, and dashboard flows. This document defines the automated testing strategy planned for v1.1 and beyond. Automated test implementation is tracked in FutureClarusMD.md under Phase 7.
+
 ## Purpose
 This document defines testing for MVP logic in ClarusMD. Testing is focused on validating scoring logic, tier classification, and recommendation outputs for consistency and correctness. It supports the system direction in [PLAN.md](./PLAN.md) and should evolve with active logic, data structures, and feature scope.
 

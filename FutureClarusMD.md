@@ -18,14 +18,7 @@ The MVP currently delivers:
 - `Lab Results`
 - Coverage for 7 Ontario medical schools
 
-Known bugs still pending:
-
-- MCAT bar color threshold issue:
-  A score of `500` currently displays as green when it should appear yellow or red
-- Status tag wording issue:
-  The strongest stat card tag currently reads `Strong OK` instead of clearer wording
-- Lab Results school matching issue:
-  Maximum inputs do not currently show all schools as top matches
+All MVP bugs have been resolved as of April 7 2026. See CHANGELOG.md for the full fix history.
 
 ## 2. Immediate Next Steps
 

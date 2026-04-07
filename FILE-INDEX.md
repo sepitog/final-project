@@ -10,6 +10,7 @@ Start with `index.html` as the main application entry point for the current UI. 
 - `README.md` provides the high-level product overview and current application flow.
 - `FEATURES.md` documents the implemented features, logic, interactions, and known issues for contributors.
 - `CHANGELOG.md` records what has been built and the current known issues.
+- `FutureClarusMD.md` documents the post-MVP product roadmap including authentication, expanded school data, deeper questionnaire inputs, monetisation, and technical migration phases.
 - `AGENTS.md` defines the ClarusMD development agent protocol and documentation enforcement rules.
 - `PLAN.md` provides the strategic system overview, active MVP architecture, and phased roadmap.
 - `FILE-INDEX.md` explains how the project documentation is organized and how the files relate.
@@ -21,4 +22,4 @@ Start with `index.html` as the main application entry point for the current UI. 
 - Additional documentation may be added later for implementation notes, data references, or system decisions as the project grows.
 
 ## Repository Note
-At this stage, ClarusMD contains a functioning single-file MVP application alongside active project documentation. Future structural additions should remain consistent with the system described in [PLAN.md](./PLAN.md).
+At this stage, ClarusMD contains a functioning single-file MVP application alongside active project documentation. Future structural additions should remain consistent with the system described in [PLAN.md](./PLAN.md) and the roadmap documented in [FutureClarusMD.md](./FutureClarusMD.md).
