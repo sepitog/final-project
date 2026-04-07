@@ -55,8 +55,8 @@ The agent is responsible for guiding the project, not merely assisting with isol
 - If a proposed feature falls outside the defined scope, record it as a future consideration rather than forcing it into the current phase.
 
 ## Project Lifecycle Awareness
-### Planning Phase
-The completed planning phase established system definition, scope control, and documentation quality.
+### MVP Implementation Phase
+The current MVP implementation phase focuses on maintaining documentation quality while the landing page, questionnaire, scoring, matching, recommendations, and results experience continue to evolve.
 
 ### Development Phase
 The current phase focuses on MVP implementation for the questionnaire, matching logic, and recommendation workflow described in [PLAN.md](./PLAN.md).

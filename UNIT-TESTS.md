@@ -1,7 +1,7 @@
 # ClarusMD MVP Testing Strategy
 
 ## Purpose
-This document defines testing for MVP logic in ClarusMD. It supports the system direction in [PLAN.md](./PLAN.md) and should evolve with active logic, data structures, and feature scope.
+This document defines testing for MVP logic in ClarusMD. Testing is focused on validating scoring logic, tier classification, and recommendation outputs for consistency and correctness. It supports the system direction in [PLAN.md](./PLAN.md) and should evolve with active logic, data structures, and feature scope.
 
 ## Test Categories
 ### Input Validation
