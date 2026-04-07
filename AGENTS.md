@@ -56,10 +56,10 @@ The agent is responsible for guiding the project, not merely assisting with isol
 
 ## Project Lifecycle Awareness
 ### MVP Implementation Phase
-The current MVP implementation phase focuses on maintaining documentation quality while the landing page, questionnaire, scoring, matching, recommendations, and results experience continue to evolve.
+The ClarusMD MVP is complete. The landing page, questionnaire, scoring, matching, recommendations, results experience, and dashboard have all been implemented and verified. Future development follows the roadmap in FutureClarusMD.md.
 
 ### Development Phase
-The current phase focuses on MVP implementation for the questionnaire, matching logic, and recommendation workflow described in [PLAN.md](./PLAN.md).
+The MVP implementation phase is complete. Active development now follows the post-MVP roadmap defined in FutureClarusMD.md.
 
 ### Scaling Phase
 Later work should support broader data coverage, maintainable rule updates, and stronger testing discipline without weakening structure or clarity.

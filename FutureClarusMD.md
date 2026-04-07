@@ -20,18 +20,9 @@ The MVP currently delivers:
 
 All MVP bugs have been resolved as of April 7 2026. See CHANGELOG.md for the full fix history.
 
-## 2. Immediate Next Steps
+## 2. Resolved Pre-Roadmap Fixes
 
-These fixes should be completed before any new features are added.
-
-- [ ] Fix MCAT progress bar color thresholds
-  Update the threshold logic so `500` no longer appears green and scores below competitive levels are visually represented more accurately.
-
-- [ ] Replace `Strong OK` with clearer strongest-tier wording
-  Use wording such as `On Track`, `Competitive`, or `Strong` to improve clarity and polish.
-
-- [ ] Fix Lab Results top-tier school matching
-  Ensure maximum or near-maximum profiles display all schools as appropriately positive matches in the simulator.
+All three pre-roadmap bugs were resolved before Phase 1 work begins. MCAT progress bar color thresholds corrected so 500 no longer displays as green. Stat card tag label updated from Strong OK to clearer wording. Lab Results school matching corrected so maximum inputs show all schools as top matches. See CHANGELOG.md for the full fix history.
 
 ## 3. Phase 1 Roadmap: Authentication and Persistence
 

@@ -3,12 +3,12 @@
 This repository contains both documentation and implementation of the ClarusMD MVP system.
 
 ## How to Use This Repository
-Start with `index.html` as the main application entry point for the current UI. Use [README.md](./README.md) for the high-level product overview, [FEATURES.md](./FEATURES.md) for detailed feature and logic documentation, [PLAN.md](./PLAN.md) to understand the system direction, [AGENTS.md](./AGENTS.md) to understand the development rules, [TODO.md](./TODO.md) to track remaining work, [LOGBOOK.md](./LOGBOOK.md) to review project history, and [UNIT-TESTS.md](./UNIT-TESTS.md) to understand MVP quality expectations.
+Start with `Index.html` as the main application entry point for the current UI. Use [README.md](./README.md) for the high-level product overview, [FEATURES.md](./FEATURES.md) for detailed feature and logic documentation, [PLAN.md](./PLAN.md) to understand the system direction, [AGENTS.md](./AGENTS.md) to understand the development rules, [TODO.md](./TODO.md) to track remaining work, [LOGBOOK.md](./LOGBOOK.md) to review project history, and [UNIT-TESTS.md](./UNIT-TESTS.md) to understand MVP quality expectations.
 
 ## Core System Files
-- `index.html` serves as the main application interface (UI + logic).
+- `Index.html` serves as the main application interface (UI + logic).
 - `README.md` provides the high-level product overview and current application flow.
-- `FEATURES.md` documents the implemented features, logic, interactions, and known issues for contributors.
+- `FEATURES.md` documents the implemented features, logic, interactions, and resolved fixes for contributors.
 - `CHANGELOG.md` records what has been built and the current known issues.
 - `FutureClarusMD.md` documents the post-MVP product roadmap including authentication, expanded school data, deeper questionnaire inputs, monetisation, and technical migration phases.
 - `AGENTS.md` defines the ClarusMD development agent protocol and documentation enforcement rules.

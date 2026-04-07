@@ -46,4 +46,4 @@ Output correctness passes when recommendations clearly reflect the evaluated str
 - The same questionnaire response set should produce the same score, matches, and recommendations each time it is processed.
 
 ## MVP Testing Note
-Testing is intended to support the active ClarusMD MVP build. Automated coverage should focus first on the scoring function, matching logic, and output consistency so implementation work can expand without breaking core evaluation behavior.
+The ClarusMD MVP has been completed and manually validated. Automated test implementation is the first priority in the v1.1 phase and is tracked in FutureClarusMD.md under Phase 7.
